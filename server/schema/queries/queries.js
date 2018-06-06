@@ -1,14 +1,26 @@
 import {
+  UserListType,
+  UserType
+} from './user';
+
+import {
   GraphQLNonNull,
   GraphQLString
 } from 'graphql';
 
 import {
-  UserType,
+  getUsers,
   getUser
-} from '../../types/User';
+} from './db';
 
-export default {
+export var UserListQuery = {
+  type: UserListType,
+  resolve: (root, args, context, info) => {
+    return getUsers();
+  }
+}
+
+export var UserQuery = {
   type: UserType,
   args: {
     userid: {

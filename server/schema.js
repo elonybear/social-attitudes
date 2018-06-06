@@ -1,6 +1,6 @@
 import { GraphQLSchema } from 'graphql';
 
-import RootQuery from './roots/query';
+import RootQuery from './schema/query';
 
 var schema = new GraphQLSchema({
   query: RootQuery

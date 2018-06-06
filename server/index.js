@@ -1,7 +1,7 @@
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
-import schema from './schema/root.js';
+import schema from './schema.js';
 
 import {GRAPHQL_PORT, GRAPHQL_BASE_URL} from './config';
 

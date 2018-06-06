@@ -1,16 +1,14 @@
 {
   "presets": [
-    [
-      "env", {
-        "es2015": {
-          "modules": false
-        }
+    "react",
+    [ "env", {
+      "targets": {
+        "browsers": "> 2%"
       }
-    ],
-    "react"
+    }]
   ],
+
   "plugins": [
-    "react-hot-loader/babel",
-    "relay"
+    "react-hot-loader/babel"
   ]
 }
