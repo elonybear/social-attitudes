@@ -1,6 +1,7 @@
 import { GraphQLObjectType } from 'graphql';
 
-import {UserListQuery, UserQuery} from './queries/queries';
+import {UserListQuery, UserQuery, SkitListQuery, BotListQuery} from './queries/queries';
+import {nodeField} from './queries/types';
 
 import {
   nodeDefinitions,
@@ -10,7 +11,10 @@ import {
 export default new GraphQLObjectType({
   name: 'SocialAttitudesRootQuery',
   fields: {
+    node: nodeField,
     users: UserListQuery,
-    user: UserQuery
+    user: UserQuery,
+    skits: SkitListQuery,
+    bots: BotListQuery
   }
 });

@@ -1,17 +1,22 @@
 import {
   UserListType,
-  UserType
-} from './user';
+  UserType,
+  SkitListType,
+  BotListType
+} from './types';
 
 import {
   GraphQLNonNull,
-  GraphQLString
+  GraphQLString,
+  GraphQLList
 } from 'graphql';
 
 import {
   getUsers,
-  getUser
-} from './db';
+  getUser,
+  getSkits,
+  getBots
+} from '../db';
 
 export var UserListQuery = {
   type: UserListType,
@@ -30,5 +35,19 @@ export var UserQuery = {
   resolve: (root, args, context, info) => {
     const { userid } = args
     return getUser(userid)
+  }
+}
+
+export var SkitListQuery = {
+  type: SkitListType,
+  resolve: () => {
+    return getSkits()
+  }
+}
+
+export var BotListQuery = {
+  type: BotListType,
+  resolve: () => {
+    return getBots()
   }
 }
