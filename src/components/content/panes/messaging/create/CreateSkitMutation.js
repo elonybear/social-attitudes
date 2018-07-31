@@ -22,7 +22,7 @@ export function createSkit(source, parentID, callback) {
 
   const configs = [{
     type: 'RANGE_ADD',
-    parentID: 'U2tpdExpc3Q6',
+    parentID: parentID,
     connectionInfo: [{
       key: 'SkitList_skits',
       rangeBehavior: 'append',
