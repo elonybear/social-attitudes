@@ -1,0 +1,44 @@
+.tile {
+  /* width: 20vw; */
+  /* height: 17vw; */
+  margin:0 auto;
+  border-radius:5px;
+  text-align: center;
+  vertical-align: middle;
+  background-color:white;
+  /* line-height: 17vw; */
+  /* padding:20px; */
+  margin-bottom:20px;
+}
+
+.tile .metric {
+  font-weight:300;
+  padding:75px 0;
+}
+
+.tile .metric .value {
+  font-size:48px;
+}
+
+.tile .metric .subtitle {
+  font-size:24px;
+  color:#a7a7a7;
+}
+
+.tile .metric .graph-btn {
+  font-size:20px;
+  margin-top:50px;
+}
+
+.tile .metric .graph-btn a {
+  padding-bottom: 2px;
+}
+
+.tile .metric .graph-btn a:hover {
+  text-decoration: none;
+  border-bottom: 1px solid #337ab7;
+}
+
+.tile:active {
+  position:relative;
+}

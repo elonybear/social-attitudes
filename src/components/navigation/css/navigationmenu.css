@@ -1,0 +1,26 @@
+.nav-bar {
+  font-size:18px;
+  color: lightgray;
+  font-family: 'Helvetica';
+  font-weight:200;
+  box-shadow:0 0 10px;
+  padding:20px;
+  background-color:white;
+}
+
+.nav-bar-item {
+  margin-bottom:12px;
+}
+
+.nav-bar-item.active {
+  color:black;
+}
+
+.nav-bar-item:hover {
+  cursor:pointer;
+  color:black;
+}
+
+.nav-bar-item.active:hover {
+  cursor:auto;
+}

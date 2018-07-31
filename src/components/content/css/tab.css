@@ -1,0 +1,37 @@
+.tab {
+  line-height:40px;
+  text-align: center;
+  vertical-align: middle;
+  background: #e8e7e7;
+  transform: perspective(5px) rotateX(1deg);
+  color:black;
+  position:relative;
+  width:25%;
+  float:left;
+  border-left:1px solid #c8c8c8;
+  border-right:1px solid #c8c8c8;
+  border-top:1px solid #c8c8c8;
+  border-radius:3px 3px 0 0;
+}
+
+.tab-text {
+  transform: perspective(10px) rotateX(-2deg);
+}
+
+.tab.active {
+  z-index:10;
+  background-color:white;
+  border-bottom:1px solid white;
+}
+
+.tab.inactive {
+  border-bottom:1px solid #c8c8c8;
+}
+
+.left-5 {
+  left:5px;
+}
+
+.right-5 {
+  right:5px;
+}

@@ -1,0 +1,8 @@
+.content-wrapper {
+  background-color:white;
+  border-radius:0 0 10px 10px;
+  min-height:750px;
+  margin-bottom:30px;
+  border:1px solid #c8c8c8;
+  overflow-y: auto;
+}

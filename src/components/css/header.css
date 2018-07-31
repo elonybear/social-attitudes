@@ -1,0 +1,41 @@
+.header {
+  z-index:1049;
+  color: white;
+  background-color: white;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.header a {
+  color:#129fff;
+}
+
+.navbar-brand {
+  font-size:26px;
+  line-height:80px;
+  height: auto;
+  padding: 0;
+}
+
+.company-logo {
+  width:40px;
+  margin-top:20px;
+}
+
+.company-title {
+  font-weight:bold;
+  margin-left:5px;
+  /* margin-top:27px; */
+}
+
+.service-title {
+  font-weight:200;
+  margin-left:10px;
+  /* margin-top:27px; */
+}
+
+.tool-title {
+  font-weight:200;
+  margin-left:10px;
+  color:darkgray;
+  /* margin-top:27px; */
+}
