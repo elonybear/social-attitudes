@@ -28,24 +28,53 @@ class SkitList extends React.Component {
     this.props.history.push(this.props.match.url + `/${skit.id}`)
   }
 
+  militaryToStandard(time) {
+    time = time.split(':'); // convert to array
+
+    // fetch
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+    var seconds = Number(time[2]);
+
+    // calculate
+    var timeValue;
+
+    if (hours > 0 && hours <= 12) {
+      timeValue= "" + hours;
+    } else if (hours > 12) {
+      timeValue= "" + (hours - 12);
+    } else if (hours == 0) {
+      timeValue= "12";
+    }
+
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
+    timeValue += (seconds < 10) ? ":0" + seconds : ":" + seconds;  // get seconds
+    timeValue += (hours >= 12) ? " PM" : " AM";  // get AM/PM
+    return timeValue;
+  }
+
+  formatDate(fullDate) {
+    let d = new Date(fullDate);
+    let time = this.militaryToStandard(`${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`)
+    let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
+    return `${time} ${date}`
+  }
+
   renderSkits() {
 
     let edges = [...this.props.skits.skits.edges];
-    let allBots = this.props.bots.bots.edges;
 
     edges.sort((edgeA, edgeB) => new Date(edgeB.node.last_updated) - new Date(edgeA.node.last_updated));
 
-    console.log(edges);
-
     return edges.map(edge => {
-      let botNodes = edge.node.bots.edges.map(bot => allBots.find(b => b.node.botid == bot.node.botid).node)
+      let botNodes = edge.node.SkitList_bots.edges.map(bot => bot.node)
       return (
         <div key={edge.node.id} className="skit-list-item clickable" onClick={this.handleItemClick.bind(this, edge.node)}>
-          <div className="col-md-2"><span className="table-datum">{edge.node.title}</span></div>
+          <div className="col-md-3"><span className="table-datum">{edge.node.title}</span></div>
           <div className="col-md-2"><span className="table-datum">{edge.node.messages.edges.length}</span></div>
-          <div className="col-md-2">{botNodes.map(bot => <div key={bot.id}>{bot.name}</div>)}</div>
-          <div className="col-md-3"><div className="">{edge.node.created}</div></div>
-          <div className="col-md-3"><span className="table-datum">{edge.node.last_updated}</span></div>
+          <div className="col-md-3">{botNodes.map(bot => <div key={bot.id}>{bot.name}</div>)}</div>
+          <div className="col-md-2"><div className="">{this.formatDate(edge.node.created)}</div></div>
+          <div className="col-md-2"><span className="table-datum">{this.formatDate(edge.node.last_updated)}</span></div>
         </div>
       )
     })
@@ -62,11 +91,11 @@ class SkitList extends React.Component {
               onClick={this.handleCreateClick.bind(this)}><i className="fas fa-plus m-r-5"></i> Create New Skit</span>
           </div>
           <div className="row table-headers m-lr-5">
-            <div className="col-md-2">TITLE</div>
+            <div className="col-md-3">TITLE</div>
             <div className="col-md-2"># MESSAGES</div>
-            <div className="col-md-2">BOTS</div>
-            <div className="col-md-3">CREATED</div>
-            <div className="col-md-3">LAST UPDATED</div>
+            <div className="col-md-3">BOTS</div>
+            <div className="col-md-2">CREATED</div>
+            <div className="col-md-2">LAST UPDATED</div>
           </div>
           <div className="row table-cells h-600 scrollbar">
             {this.renderSkits()}
@@ -138,10 +167,12 @@ export default createFragmentContainer(SkitList, {
             title,
             created,
             last_updated,
-            bots(first: $rows) @connection(key: "Skit_SkitList_bots", filters: []) {
+            SkitList_bots: bots(first: $rows) @connection(key: "Skit_SkitList_bots") {
               edges {
                 node {
-                  botid
+                  id,
+                  botid,
+                  name
                 }
               }
             },

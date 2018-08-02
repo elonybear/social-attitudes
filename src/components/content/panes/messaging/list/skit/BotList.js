@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {removeBot} from './RemoveBotMutation'
+
 export default class BotList extends React.Component {
 
   componentDidMount() {
@@ -11,11 +13,21 @@ export default class BotList extends React.Component {
   }
 
   handleAddBot() {
-    this.props.history.push(`${this.props.match.url}/test`, this.props.location.state)
+    // this.props.history.push(`${this.props.match.url}/test`, this.props.location.state)
   }
 
   getMessagesForBot(botName) {
     return this.props.skit.messages.edges.filter(edge => edge.node.authorName == botName)
+  }
+
+  handleRemoveBot(botid) {
+    removeBot({
+      skitid: this.props.skit.skitid,
+      bots: this.props.skit.bots.edges
+        .filter(edge => edge.node.botid != botid)
+        .map(edge => edge.node.botid),
+      victim: botid
+    }, this.props.skit.id, (id) => console.log("Successfully removed " + id));
   }
 
   renderBots() {
@@ -29,6 +41,8 @@ export default class BotList extends React.Component {
         </div>
       )
     }
+
+    console.log(bots)
 
     return skit.bots.edges
       .map(bot => {
@@ -48,7 +62,7 @@ export default class BotList extends React.Component {
             <div className="col-md-5"><span className="table-datum">{bot.node.name}</span></div>
             <div className="col-md-4"><span className="table-datum">{numMessages}</span></div>
             <div className="col-md-1" style={{color: '#EB1E32'}}>
-              <i className="fas fa-minus-circle clickable"></i>
+              <span onClick={this.handleRemoveBot.bind(this, bot.node.botid)}><i className="fas fa-minus-circle clickable" ></i></span>
             </div>
           </div>
         )

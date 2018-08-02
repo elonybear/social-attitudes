@@ -1,6 +1,7 @@
 import {
   mutationWithClientMutationId,
-  fromGlobalId
+  fromGlobalId,
+  toGlobalId
 } from 'graphql-relay';
 
 import {
@@ -13,12 +14,15 @@ import {
 
 import {
   SkitType,
-  SkitEdge
+  SkitEdge,
+  BotType
 } from '../../queries/types'
 
 import {
   updateSkit,
-  getSkit
+  getSkit,
+  getBot,
+  updateSkitBots
 } from '../../db'
 
 let inputFields = {
@@ -50,19 +54,20 @@ export var RemoveBotMutation = mutationWithClientMutationId({
   name: 'RemoveBot',
   inputFields: {
     'skitid': { type: new GraphQLNonNull(GraphQLString) },
-    'botid': { type: new GraphQLNonNull(GraphQLString) }
+    'bots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+    'victim': { type: new GraphQLNonNull(GraphQLString) }
   },
   outputFields: {
-    skit: {
-      type: SkitType,
-      resolve: ({skitid}) => getSkit(skitid)
+    removedBotID: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: ({botid}) => toGlobalId('Bot', botid)
     }
   },
-  mutateAndGetPayload: (input) => {
-    return removeBotFromSkit(input).then(id => {
-        console.log('Removed bot from ' + id);
+  mutateAndGetPayload: ({skitid, bots, victim}) => {
+    return updateSkitBots(skitid, bots).then(_ => {
+      console.log("Updated!")
         return {
-          skitid: id
+          botid: victim
         }
     });
   }

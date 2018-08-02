@@ -2,7 +2,7 @@ import {
   commitMutation,
   graphql,
 } from 'react-relay'
-import environment from '../../../../../environment.js'
+import environment from '../../../../../../environment.js'
 import {ConnectionHandler} from 'relay-runtime';
 
 const mutation = graphql`
@@ -10,42 +10,42 @@ const mutation = graphql`
     $input: RemoveBotInput!
   ) {
     removeBot(input: $input) {
-      skit {
-        bots {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-      }
+      removedBotID
   }
 }
 `
 
-function sharedUpdater(store, parentID, newNode) {
-  const parentProxy = store.get(parentID);
+// function sharedUpdater(store, parentID, victim) {
+//   console.log(parentID);
+//   console.log(victim);
+//   const parentProxy = store.get(parentID);
+//
+//   const connSkit= ConnectionHandler.getConnection(
+//     parentProxy,
+//     'Skit_bots',
+//   );
+//
+//   console.log(connSkit)
+//
+//   ConnectionHandler.deleteNode(connSkit, victim);
+// }
 
-  const connSkit= ConnectionHandler.getConnection(
-    parentProxy,
-    'Skit_bots',
-  );
-
-  ConnectionHandler.deleteNode(connSkit, newEdge);
-
-  const connList = ConnectionHandler.getConnection(
-    parentProxy,
-    'Skit_SkitList_bots',
-  );
-
-  ConnectionHandler.insertEdgeAfter(connList, newEdge);
-}
-
-
-export function createBot(source, parentID, callback) {
+export function removeBot(source, parentID, callback) {
   const variables = {
     input: source,
   };
+
+  console.log(variables)
+
+  const configs = [{
+    type: 'RANGE_DELETE',
+    parentID: parentID,
+    connectionKeys: [{
+      key: 'Skit_bots',
+    }, { key: 'Skit_SkitList_bots'}],
+    pathToConnection: ['skit', 'bots'],
+    deletedIDFieldName: 'removedBotID'
+  }];
 
   commitMutation(
     environment,
@@ -53,21 +53,13 @@ export function createBot(source, parentID, callback) {
       mutation,
       variables,
       onCompleted: (response, errors) => {
+        console.log(errors)
         console.log('Response received from server.')
         console.log(response);
-        callback(response.createBot.bot.id);
+        callback(response.removeBot.removedBotID);
       },
       onError: err => console.error(err),
-      updater: (store) => {
-        // Get the payload returned from the server
-        const payload = store.getRootField('createBot');
-
-        // Get the edge of the newly created Todo record
-        const newNode = payload.getLinkedRecord('bot');
-
-        // Add it to the user's todo list
-        sharedUpdater(store, parentID, newNode);
-      },
+      configs
     },
   );
 }

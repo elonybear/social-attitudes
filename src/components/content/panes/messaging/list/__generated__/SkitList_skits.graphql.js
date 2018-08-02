@@ -20,10 +20,12 @@ export type SkitList_skits = {|
         +title: string,
         +created: ?string,
         +last_updated: ?string,
-        +bots: ?{|
+        +SkitList_bots: ?{|
           +edges: ?$ReadOnlyArray<?{|
             +node: ?{|
-              +botid: string
+              +id: string,
+              +botid: string,
+              +name: string,
             |}
           |}>
         |},
@@ -173,7 +175,7 @@ return {
                 },
                 {
                   "kind": "LinkedField",
-                  "alias": "bots",
+                  "alias": "SkitList_bots",
                   "name": "__Skit_SkitList_bots_connection",
                   "storageKey": null,
                   "args": null,
@@ -198,10 +200,18 @@ return {
                           "concreteType": "Bot",
                           "plural": false,
                           "selections": [
+                            v0,
                             {
                               "kind": "ScalarField",
                               "alias": null,
                               "name": "botid",
+                              "args": null,
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "name": "name",
                               "args": null,
                               "storageKey": null
                             },
@@ -266,5 +276,5 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'f6cffdf31f32c9d092ad1a9e0c846d29';
+(node/*: any*/).hash = 'c6f4a5bd751fc17966176565bd85216d';
 module.exports = node;

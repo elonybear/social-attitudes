@@ -112,6 +112,11 @@ export function getBot(botid) {
   return DB.execute('SELECT * FROM bots WHERE botid = ?', [botid]).then(bot => bot.rows[0])
 }
 
+export function updateSkitBots(skitid, bots) {
+  let botsString = `[${bots.map(bot => `'${bot}'`).join(",")}]`
+  return DB.execute(`UPDATE skits SET bots = ${botsString} where skitid = ? IF EXISTS`, [skitid]);
+}
+
 export function createBot(name) {
   let id = uuid();
 

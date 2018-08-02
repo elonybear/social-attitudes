@@ -10,59 +10,48 @@ const mutation = graphql`
     $input: CreateSkitInput!
   ) {
     createSkit(input: $input) {
-      skit {
-        id,
-        title,
-        bots {
-          edges {
-            node {
-              id
-              botid,
-              name
+      newSkitEdge {
+        node {
+          id,
+          title,
+          created,
+          last_updated,
+          SkitList_bots: bots(first: 100) @connection(key: "Skit_SkitList_bots") {
+            edges {
+              node {
+                botid
+              }
             }
-          }
-        },
-        description,
-        messages {
-          edges {
-            node {
-              id,
-              text,
-              author
+          },
+          messages {
+            edges {
+              node {
+                id,
+              }
             }
-          }
-        },
-        last_updated,
-        created
+          },
+          ...Skit_skit
+        }
       }
   }
 }
 `
-
-function sharedUpdater(store, parentID, newNode){
-  console.log(newNode);
-  const parentProxy = store.get(parentID);
-  
-  const conn = ConnectionHandler.getConnection(
-    parentProxy,
-    'SkitList_skits',
-  );
-
-  const newEdge = ConnectionHandler.createEdge(
-    store,
-    conn,
-    newNode,
-    'SkitEdge'
-  );
-
-  ConnectionHandler.insertEdgeAfter(conn, newEdge);
-}
 
 
 export function createSkit(source, parentID, callback) {
   const variables = {
     input: source,
   };
+
+  const configs = [{
+    type: 'RANGE_ADD',
+    parentID: parentID,
+    connectionInfo: [{
+      key: 'SkitList_skits',
+      rangeBehavior: 'append',
+    }],
+    edgeName: 'newSkitEdge',
+  }];
 
   commitMutation(
     environment,
@@ -72,19 +61,20 @@ export function createSkit(source, parentID, callback) {
       onCompleted: (response, errors) => {
         console.log('Response received from server.')
         console.log(response);
-        callback(response.createSkit.skit.id);
+        callback(response.createSkit.newSkitEdge.node.id);
       },
       onError: err => console.error(err),
-      updater: (store) => {
-        // Get the payload returned from the server
-        const payload = store.getRootField('createSkit');
-
-        // Get the edge of the newly created Todo record
-        const newNode = payload.getLinkedRecord('skit');
-
-        // Add it to the user's skit list
-        sharedUpdater(store, parentID, newNode);
-      },
+      // updater: (store) => {
+      //   // Get the payload returned from the server
+      //   const payload = store.getRootField('createSkit');
+      //
+      //   // Get the edge of the newly created Todo record
+      //   const newNode = payload.getLinkedRecord('skit');
+      //
+      //   // Add it to the user's skit list
+      //   sharedUpdater(store, parentID, newNode);
+      // },
+      configs
     },
   );
 }

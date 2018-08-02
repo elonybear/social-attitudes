@@ -128,7 +128,7 @@ class Skit extends React.Component {
   render() {
     let skit = this.props.skit
     return (
-      <div id="skit" className="skit-wrapper outset">
+      <div id="skit" className="skit-wrapper outset rounded">
         <div onClick={this.handleBackButton.bind(this)} className="clickable">
           <i className="fas fa-chevron-left m-r-5"></i>Back to list
         </div>
