@@ -1,6 +1,7 @@
 import {
   mutationWithClientMutationId,
-  fromGlobalId
+  fromGlobalId,
+  cursorForObjectInConnection
 } from 'graphql-relay';
 
 import {
@@ -12,16 +13,19 @@ import {
 } from 'graphql';
 
 import {
-  SkitType
+  SkitType,
+  SkitEdge
 } from '../../queries/types'
 
 import {
   createSkit,
-  getSkit
+  getSkit,
+  getSkits
 } from '../../db'
 
 let inputFields = {
   'title': { type: new GraphQLNonNull(GraphQLString) },
+  'description': { type: new GraphQLNonNull(GraphQLString) },
   'bots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) }
 }
 
@@ -29,9 +33,21 @@ export var CreateSkitMutation = mutationWithClientMutationId({
   name: 'CreateSkit',
   inputFields: inputFields,
   outputFields: {
-    skitid: {
-      type: GraphQLString,
-      resolve: ({skitid}) => skitid
+    newSkitEdge: {
+      type: SkitEdge,
+      resolve: ({skitid}) => {
+        let skitPromise = getSkit(skitid);
+        let skitsPromise = getSkits();
+        return Promise.all([skitPromise, skitsPromise])
+          .then(results => {
+            let skit = results[0];
+            let skits = results[1];
+            return {
+              node: skit,
+              cursor: cursorForObjectInConnection(skits, skit),
+            }
+          })
+      }
     }
   },
   mutateAndGetPayload: (input) => {

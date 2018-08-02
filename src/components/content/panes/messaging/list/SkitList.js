@@ -1,10 +1,12 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
-import {createFragmentContainer, graphql} from 'react-relay';
+import {Switch, Route} from 'react-router-dom';
+import {createFragmentContainer, graphql, QueryRenderer} from 'react-relay';
 import CreateSkitForm from '../create/CreateSkitForm';
+import Skit from './Skit';
+import environment from '../../../../../environment'
 
 
-import './css/conversationlist.css';
+import './css/skitlist.css';
 
 Array.prototype.flatMap = function(callback) {
   let result = []
@@ -22,20 +24,57 @@ class SkitList extends React.Component {
     this.props.history.push(this.props.match.url + "/create")
   }
 
-  renderConversations() {
+  handleItemClick(skit) {
+    this.props.history.push(this.props.match.url + `/${skit.id}`)
+  }
 
-    let edges = this.props.skits.skits.edges;
-    let allBots = edges.flatMap(edge => edge.node.messages.edges.map(message => message.node.authorName));
-    let bots = new Set(["john", "elon"])
+  militaryToStandard(time) {
+    time = time.split(':'); // convert to array
+
+    // fetch
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+    var seconds = Number(time[2]);
+
+    // calculate
+    var timeValue;
+
+    if (hours > 0 && hours <= 12) {
+      timeValue= "" + hours;
+    } else if (hours > 12) {
+      timeValue= "" + (hours - 12);
+    } else if (hours == 0) {
+      timeValue= "12";
+    }
+
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
+    timeValue += (seconds < 10) ? ":0" + seconds : ":" + seconds;  // get seconds
+    timeValue += (hours >= 12) ? " PM" : " AM";  // get AM/PM
+    return timeValue;
+  }
+
+  formatDate(fullDate) {
+    let d = new Date(fullDate);
+    let time = this.militaryToStandard(`${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`)
+    let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
+    return `${time} ${date}`
+  }
+
+  renderSkits() {
+
+    let edges = [...this.props.skits.skits.edges];
+
+    edges.sort((edgeA, edgeB) => new Date(edgeB.node.last_updated) - new Date(edgeA.node.last_updated));
 
     return edges.map(edge => {
+      let botNodes = edge.node.SkitList_bots.edges.map(bot => bot.node)
       return (
-        <div key={edge.node.id} className="row conversation-list-item">
+        <div key={edge.node.id} className="skit-list-item clickable" onClick={this.handleItemClick.bind(this, edge.node)}>
           <div className="col-md-3"><span className="table-datum">{edge.node.title}</span></div>
           <div className="col-md-2"><span className="table-datum">{edge.node.messages.edges.length}</span></div>
-          <div className="col-md-1">{Array.from(bots).map(bot => <div key={bot}>{bot}</div>)}</div>
-          <div className="col-md-3"><div className="">{edge.node.created}</div></div>
-          <div className="col-md-3"><span className="table-datum">{edge.node.last_updated}</span></div>
+          <div className="col-md-3">{botNodes.map(bot => <div key={bot.id}>{bot.name}</div>)}</div>
+          <div className="col-md-2"><div className="">{this.formatDate(edge.node.created)}</div></div>
+          <div className="col-md-2"><span className="table-datum">{this.formatDate(edge.node.last_updated)}</span></div>
         </div>
       )
     })
@@ -53,28 +92,63 @@ class SkitList extends React.Component {
           </div>
           <div className="row table-headers m-lr-5">
             <div className="col-md-3">TITLE</div>
-            <div className="col-md-2">LENGTH (# MESSAGES)</div>
-            <div className="col-md-1">BOTS</div>
-            <div className="col-md-3">CREATED</div>
-            <div className="col-md-3">LAST UPDATED</div>
+            <div className="col-md-2"># MESSAGES</div>
+            <div className="col-md-3">BOTS</div>
+            <div className="col-md-2">CREATED</div>
+            <div className="col-md-2">LAST UPDATED</div>
           </div>
-          <div className="table-cells">
-            {this.renderConversations()}
+          <div className="row table-cells h-600 scrollbar">
+            {this.renderSkits()}
           </div>
         </div>
       </div>
     )
   }
 
-  render() {
+  renderQueryRenderer(routeProps) {
+    console.log(routeProps)
+    return (
+      <QueryRenderer
+        environment={environment}
+        query={graphql`
+                query SkitList_Query($skitid: ID!) {
+                  node(id: $skitid) {
+                    ...Skit_skit
+                  }
+                }
+              `}
+        variables={{
+          skitid: routeProps.match.params.id,
+        }}
+        render={({error, props}) => {
+          if (error) {
+            return <div>{error.message}</div>;
+          } else if (props) {
+            return (
+              <Skit {...routeProps} skit={props.node} bots={this.props.bots.bots}/>
+            )
+          }
+          return <div>Loading</div>;
+        }}
+      />
+    )
+  }
 
-    console.log(this.props)
+  render() {
 
     return (
       <div className="">
         <div className="clearfix"></div>
-        <Route exact path={this.props.match.url} render={this.renderSkitList.bind(this)}/>
-        <Route exact path={this.props.match.url + "/create"} render={(props) => <CreateSkitForm {...this.props} parentID={this.props.skits.id} {...props} />} />
+        <Switch>
+          <Route exact path={this.props.match.url} render={this.renderSkitList.bind(this)}/>
+          <Route
+            path={this.props.match.url + "/create"}
+            render={(props) =>
+              <CreateSkitForm {...this.props} parentID={this.props.skits.id} {...props} />} />
+          <Route
+            path={this.props.match.url + "/:id"}
+            render={this.renderQueryRenderer.bind(this)} />
+        </Switch>
       </div>
     )
   }
@@ -93,22 +167,41 @@ export default createFragmentContainer(SkitList, {
             title,
             created,
             last_updated,
+            SkitList_bots: bots(first: $rows) @connection(key: "Skit_SkitList_bots") {
+              edges {
+                node {
+                  id,
+                  botid,
+                  name
+                }
+              }
+            },
             messages {
               edges {
                 node {
-                  text,
-                  authorName
-                  delay
+                  id,
                 }
               }
-            }
+            },
+            ...Skit_skit
           }
         }
       }
     }
   `,
   bots: graphql`
-    fragment SkitList_bots on BotList {
+    fragment SkitList_bots on BotList @argumentDefinitions(
+        rows: {type: "Int", defaultValue: 100}
+      ){
+      bots (first: $rows) @connection(key: "SkitList_bots", filters: []){
+        edges {
+          node {
+            id,
+            botid,
+            name
+          }
+        }
+      },
       ...CreateSkitForm_bots
     }
   `

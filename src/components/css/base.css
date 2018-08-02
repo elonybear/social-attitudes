@@ -8,6 +8,7 @@ html, body {
 
 .main-wrapper {
   margin-top:30px;
+  padding:0 15px;
 }
 
 .gap {
@@ -15,7 +16,11 @@ html, body {
 }
 
 .outset {
-  box-shadow:0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow:0 1px 7px 0 rgba(0,0,0,0.2);
+}
+
+.inset {
+  box-shadow:0 1px 7px 0 rgba(0,0,0,0.2) inset;
 }
 
 .clearbox {
@@ -23,7 +28,7 @@ html, body {
 }
 
 .rounded {
-  border-radius:5px;
+  border-radius:2px;
 }
 
 .m-b-md {
@@ -74,6 +79,10 @@ html, body {
   background-color:#ff5b6b;
 }
 
+.button-danger.disabled:hover {
+  background-color:#EB1E32;
+}
+
 textarea {
   resize: none;
 }
@@ -97,4 +106,42 @@ textarea {
 
 .text-success:hover {
   color:#2be96f;
+}
+
+.clickable {
+  cursor:pointer;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+	background-color: #F5F5F5;
+
+}
+
+.scrollbar::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+	background-color: #0ae;
+	background-image: -webkit-linear-gradient(45deg,rgba(255, 255, 255, .2) 25%,
+											  transparent 25%,
+											  transparent 50%,
+											  rgba(255, 255, 255, .2) 50%,
+											  rgba(255, 255, 255, .2) 75%,
+											  transparent 75%,
+											  transparent)
+}
+
+.italic {
+  font-style: italic;
+}
+
+.m-b-5 {
+  margin-bottom:5px;
+}
+
+.m-t-10 {
+  margin-top:10px;
 }

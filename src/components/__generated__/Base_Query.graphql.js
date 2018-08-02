@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash bb86c8747fecc81a3263b987e898f32e
+ * @relayHash ced372c0fdb4e1a11cf0288058d10b46
  */
 
 /* eslint-disable */
@@ -75,16 +75,29 @@ fragment SkitList_skits on SkitList {
         title
         created
         last_updated
+        SkitList_bots: bots(first: 100) {
+          edges {
+            node {
+              id
+              botid
+              name
+              __typename
+            }
+            cursor
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+        }
         messages {
           edges {
             node {
-              text
-              authorName
-              delay
               id
             }
           }
         }
+        ...Skit_skit
         __typename
       }
       cursor
@@ -97,15 +110,72 @@ fragment SkitList_skits on SkitList {
 }
 
 fragment SkitList_bots on BotList {
+  bots(first: 100) {
+    edges {
+      node {
+        id
+        botid
+        name
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
   ...CreateSkitForm_bots
 }
 
 fragment CreateSkitForm_bots on BotList {
-  bots {
+  id
+  bots(first: 100) {
     edges {
       node {
         id
+        botid
         name
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+fragment Skit_skit on Skit {
+  id
+  skitid
+  title
+  created
+  last_updated
+  bots(first: 100) {
+    edges {
+      node {
+        id
+        botid
+        name
+        __typename
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+  description
+  messages {
+    edges {
+      node {
+        id
+        text
+        author
+        delay
       }
     }
   }
@@ -152,13 +222,86 @@ v4 = {
   "name": "endCursor",
   "args": null,
   "storageKey": null
+},
+v5 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 100,
+    "type": "Int"
+  }
+],
+v6 = {
+  "kind": "LinkedField",
+  "alias": null,
+  "name": "pageInfo",
+  "storageKey": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "plural": false,
+  "selections": [
+    v4,
+    v3
+  ]
+},
+v7 = [
+  {
+    "kind": "LinkedField",
+    "alias": null,
+    "name": "edges",
+    "storageKey": null,
+    "args": null,
+    "concreteType": "BotEdge",
+    "plural": true,
+    "selections": [
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "node",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "Bot",
+        "plural": false,
+        "selections": [
+          v0,
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "botid",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "name",
+            "args": null,
+            "storageKey": null
+          },
+          v1
+        ]
+      },
+      v2
+    ]
+  },
+  v6
+],
+v8 = {
+  "kind": "LinkedField",
+  "alias": null,
+  "name": "bots",
+  "storageKey": "bots(first:100)",
+  "args": v5,
+  "concreteType": "BotConnection",
+  "plural": false,
+  "selections": v7
 };
 return {
   "kind": "Request",
   "operationKind": "query",
   "name": "Base_Query",
   "id": null,
-  "text": "query Base_Query {\n  users {\n    ...Dashboard_users\n    ...UserList_users\n    id\n  }\n  skits {\n    ...SkitList_skits\n    id\n  }\n  bots {\n    ...SkitList_bots\n    id\n  }\n}\n\nfragment Dashboard_users on UserList {\n  count\n}\n\nfragment UserList_users on UserList {\n  userList(first: 5) {\n    edges {\n      node {\n        id\n        ...User_user\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment SkitList_skits on SkitList {\n  id\n  skits(first: 100) {\n    edges {\n      node {\n        id\n        title\n        created\n        last_updated\n        messages {\n          edges {\n            node {\n              text\n              authorName\n              delay\n              id\n            }\n          }\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment SkitList_bots on BotList {\n  ...CreateSkitForm_bots\n}\n\nfragment CreateSkitForm_bots on BotList {\n  bots {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}\n\nfragment User_user on User {\n  first_name\n  last_name\n}\n",
+  "text": "query Base_Query {\n  users {\n    ...Dashboard_users\n    ...UserList_users\n    id\n  }\n  skits {\n    ...SkitList_skits\n    id\n  }\n  bots {\n    ...SkitList_bots\n    id\n  }\n}\n\nfragment Dashboard_users on UserList {\n  count\n}\n\nfragment UserList_users on UserList {\n  userList(first: 5) {\n    edges {\n      node {\n        id\n        ...User_user\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment SkitList_skits on SkitList {\n  id\n  skits(first: 100) {\n    edges {\n      node {\n        id\n        title\n        created\n        last_updated\n        SkitList_bots: bots(first: 100) {\n          edges {\n            node {\n              id\n              botid\n              name\n              __typename\n            }\n            cursor\n          }\n          pageInfo {\n            endCursor\n            hasNextPage\n          }\n        }\n        messages {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n        ...Skit_skit\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment SkitList_bots on BotList {\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...CreateSkitForm_bots\n}\n\nfragment CreateSkitForm_bots on BotList {\n  id\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment Skit_skit on Skit {\n  id\n  skitid\n  title\n  created\n  last_updated\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  description\n  messages {\n    edges {\n      node {\n        id\n        text\n        author\n        delay\n      }\n    }\n  }\n}\n\nfragment User_user on User {\n  first_name\n  last_name\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -347,14 +490,7 @@ return {
             "alias": null,
             "name": "skits",
             "storageKey": "skits(first:100)",
-            "args": [
-              {
-                "kind": "Literal",
-                "name": "first",
-                "value": 100,
-                "type": "Int"
-              }
-            ],
+            "args": v5,
             "concreteType": "SkitConnection",
             "plural": false,
             "selections": [
@@ -400,6 +536,25 @@ return {
                       },
                       {
                         "kind": "LinkedField",
+                        "alias": "SkitList_bots",
+                        "name": "bots",
+                        "storageKey": "bots(first:100)",
+                        "args": v5,
+                        "concreteType": "BotConnection",
+                        "plural": false,
+                        "selections": v7
+                      },
+                      {
+                        "kind": "LinkedHandle",
+                        "alias": "SkitList_bots",
+                        "name": "bots",
+                        "args": v5,
+                        "handle": "connection",
+                        "key": "Skit_SkitList_bots",
+                        "filters": null
+                      },
+                      {
+                        "kind": "LinkedField",
                         "alias": null,
                         "name": "messages",
                         "storageKey": null,
@@ -425,6 +580,7 @@ return {
                                 "concreteType": "Message",
                                 "plural": false,
                                 "selections": [
+                                  v0,
                                   {
                                     "kind": "ScalarField",
                                     "alias": null,
@@ -435,7 +591,7 @@ return {
                                   {
                                     "kind": "ScalarField",
                                     "alias": null,
-                                    "name": "authorName",
+                                    "name": "author",
                                     "args": null,
                                     "storageKey": null
                                   },
@@ -445,13 +601,36 @@ return {
                                     "name": "delay",
                                     "args": null,
                                     "storageKey": null
-                                  },
-                                  v0
+                                  }
                                 ]
                               }
                             ]
                           }
                         ]
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "skitid",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      v8,
+                      {
+                        "kind": "LinkedHandle",
+                        "alias": null,
+                        "name": "bots",
+                        "args": v5,
+                        "handle": "connection",
+                        "key": "Skit_bots",
+                        "filters": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "description",
+                        "args": null,
+                        "storageKey": null
                       },
                       v1
                     ]
@@ -459,33 +638,14 @@ return {
                   v2
                 ]
               },
-              {
-                "kind": "LinkedField",
-                "alias": null,
-                "name": "pageInfo",
-                "storageKey": null,
-                "args": null,
-                "concreteType": "PageInfo",
-                "plural": false,
-                "selections": [
-                  v4,
-                  v3
-                ]
-              }
+              v6
             ]
           },
           {
             "kind": "LinkedHandle",
             "alias": null,
             "name": "skits",
-            "args": [
-              {
-                "kind": "Literal",
-                "name": "first",
-                "value": 100,
-                "type": "Int"
-              }
-            ],
+            "args": v5,
             "handle": "connection",
             "key": "SkitList_skits",
             "filters": []
@@ -501,46 +661,24 @@ return {
         "concreteType": "BotList",
         "plural": false,
         "selections": [
+          v8,
           {
-            "kind": "LinkedField",
+            "kind": "LinkedHandle",
             "alias": null,
             "name": "bots",
-            "storageKey": null,
-            "args": null,
-            "concreteType": "BotConnection",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "LinkedField",
-                "alias": null,
-                "name": "edges",
-                "storageKey": null,
-                "args": null,
-                "concreteType": "BotEdge",
-                "plural": true,
-                "selections": [
-                  {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "node",
-                    "storageKey": null,
-                    "args": null,
-                    "concreteType": "Bot",
-                    "plural": false,
-                    "selections": [
-                      v0,
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "name",
-                        "args": null,
-                        "storageKey": null
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
+            "args": v5,
+            "handle": "connection",
+            "key": "SkitList_bots",
+            "filters": []
+          },
+          {
+            "kind": "LinkedHandle",
+            "alias": null,
+            "name": "bots",
+            "args": v5,
+            "handle": "connection",
+            "key": "CreateSkitForm_bots",
+            "filters": []
           },
           v0
         ]

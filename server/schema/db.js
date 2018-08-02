@@ -13,6 +13,15 @@ export class User {
 
 export class UserList {}
 
+export class Skit {
+  constructor(json) {
+    if (json == null) return;
+    for (let field in json) {
+      this[field] = json[field];
+    }
+  }
+}
+
 export function getUsers() {
   return DB.execute('SELECT * FROM users');
 }
@@ -33,15 +42,20 @@ export function getSkits() {
   return Promise.all([skitsPromise, botsPromise]).then(results => {
     let skits = results[0].rows;
     let bots = results[1].rows;
-    console.log(bots);
 
     return skits.map(skit => {
       if (skit.messages == null) {
-        return skit;
+        skit.messages = [];
       }
+
+      if (skit.bots == null) {
+        skit.bots = [];
+      }
+
       return {
         ...skit,
-        messages: skit.messages.map(message => JSON.parse(message.toString('utf8'))).map(message => ({...message, authorName: bots.find(bot => bot.botid == message.author).name}))
+        bots: skit.bots.map(botid => bots.find(bot => bot.botid == botid)),
+        messages: skit.messages.map(message => JSON.parse(message.toString('utf8')))
       }
     })
   })
@@ -49,20 +63,62 @@ export function getSkits() {
 
 export function getSkit(skitid) {
   console.log('Getting: ' + skitid)
-  return DB.execute('SELECT * FROM skits WHERE skitid = ?', [skitid])
-    .then(skit => skit.rows[0])
+  let botsPromise = DB.execute('SELECT * FROM bots');
+  let skitPromise = DB.execute('SELECT * FROM skits WHERE skitid = ?', [skitid]);
+  return Promise.all([skitPromise, botsPromise]).then(results => {
+    let skit = results[0].rows[0];
+    let bots = results[1].rows;
+    if (skit.messages == null) {
+      skit.messages = [];
+    }
+
+    if (skit.bots == null) {
+      skit.bots = [];
+    }
+
+    console.log(skit.bots)
+
+    return new Skit({
+      ...skit,
+      bots: skit.bots.map(botid => bots.find(bot => bot.botid == botid)),
+      messages: skit.messages.map(message => JSON.parse(message.toString('utf8')))
+    })
+  })
 }
 
-export function createSkit({title, bots}) {
+export function createSkit({title, bots, description}) {
   let id = uuid();
-  console.log(title)
-  console.log(bots)
-  return DB.execute("INSERT INTO skits (skitid, bots, created, last_updated, messages, title) VALUES (?, [" + bots.map(bot => `'${bot}'`).join(",") + "], dateof(now()), dateof(now()), [], ?)", [id, title]).then(_ => {
+  let botsString = `[${bots.map(bot => `'${bot}'`).join(",")}]`
+  console.log(botsString)
+  return DB.execute(`INSERT INTO skits (skitid, bots, created, description, last_updated, messages, title) VALUES (?, ${botsString}, dateof(now()), ?, dateof(now()), [], ?)`, [id, description, title]).then(_ => {
     console.log(id)
     return id;
   }).catch(e => console.log(e))
 }
 
+export function updateSkit({skitid, title, description}) {
+  console.log('Updating ' + skitid)
+  return DB.execute(`UPDATE skits SET title = ?, description = ?, last_updated = dateof(now()) WHERE skitid = ? IF EXISTS`, [title, description, skitid]).then(skit => {
+    return skitid;
+  })
+}
+
 export function getBots() {
+
   return DB.execute('SELECT * FROM bots').then(results => results.rows)
+}
+
+export function getBot(botid) {
+  return DB.execute('SELECT * FROM bots WHERE botid = ?', [botid]).then(bot => bot.rows[0])
+}
+
+export function updateSkitBots(skitid, bots) {
+  let botsString = `[${bots.map(bot => `'${bot}'`).join(",")}]`
+  return DB.execute(`UPDATE skits SET bots = ${botsString} where skitid = ? IF EXISTS`, [skitid]);
+}
+
+export function createBot(name) {
+  let id = uuid();
+
+  return DB.execute('INSERT INTO bots (botid, name) VALUES (?, ?)', [id, name]).then(_ => id)
 }

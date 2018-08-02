@@ -1,0 +1,39 @@
+.skit-wrapper {
+  background-color:white;
+  padding:15px;
+}
+
+.warning {
+  display:inline-block;
+}
+
+.skit-table {
+  padding:15px;
+  max-height:700px;
+}
+
+.table-header {
+  font-size: 20px;
+  margin-bottom:10px;
+}
+
+.skit-description {
+  font-size:14px;
+}
+
+.no-results {
+  margin: 0 auto;
+  width: 350px;
+  padding: 30px;
+  text-align: center;
+  color: lightgray;
+}
+
+.skit-bots {
+  margin-bottom:15px;
+}
+
+.title-input .form-control {
+  font-size:30px;
+  height:56px;
+}
