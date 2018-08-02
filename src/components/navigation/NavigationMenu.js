@@ -21,18 +21,18 @@ export default class NavigationMenu extends React.Component {
         'title': 'Skits',
         'route': '/skits'
       }, {
+        'title': 'Bots',
+        'route': '/bots'
+      }, {
         'title': 'Settings',
         'route': '/settings'
       }],
     }
 
-    console.log(this.props)
-
     this.state.active = this.state.tabs.findIndex(tab => this.props.location.pathname.indexOf(tab['route']) > -1)
   }
 
   handleClick(route, active) {
-    if (this.state.active === active) return;
     this.setState({active})
     this.props.history.push(`${route}`)
   }

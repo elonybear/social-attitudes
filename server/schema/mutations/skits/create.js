@@ -12,7 +12,8 @@ import {
 } from 'graphql';
 
 import {
-  SkitType
+  SkitType,
+  SkitEdge
 } from '../../queries/types'
 
 import {
@@ -22,6 +23,7 @@ import {
 
 let inputFields = {
   'title': { type: new GraphQLNonNull(GraphQLString) },
+  'description': { type: new GraphQLNonNull(GraphQLString) },
   'bots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) }
 }
 
@@ -29,9 +31,9 @@ export var CreateSkitMutation = mutationWithClientMutationId({
   name: 'CreateSkit',
   inputFields: inputFields,
   outputFields: {
-    skitid: {
-      type: GraphQLString,
-      resolve: ({skitid}) => skitid
+    skit: {
+      type: SkitType,
+      resolve: ({skitid}) => getSkit(skitid)
     }
   },
   mutateAndGetPayload: (input) => {

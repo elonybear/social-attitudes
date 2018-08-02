@@ -15,6 +15,7 @@ const jQueryPlugin = new webpack.ProvidePlugin({
 });
 
 module.exports = {
+  devtool: 'source-map',
   output: {
     publicPath: '/'
   },

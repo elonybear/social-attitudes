@@ -3,10 +3,33 @@
   padding:15px;
 }
 
-.bot-list {
-  margin-top:10px;
-}
-
 .selected-bot {
   padding:5px;
+}
+
+.select-bots-wrapper {
+  padding:10px;
+  border-radius:5px;
+  max-height:200px;
+  overflow-y: scroll;
+}
+
+.select-bots-wrapper div {
+  padding:1px;
+  cursor:pointer;
+  transition:background-color .2s;
+}
+
+.select-bots-wrapper div:hover {
+  background-color:#efefef;
+}
+
+.select-bots-wrapper .selected {
+  background-color:#509BF5;
+  color:white;
+}
+
+.select-bots-wrapper .selected:hover {
+  background-color:#84bafb;
+  color:white;
 }

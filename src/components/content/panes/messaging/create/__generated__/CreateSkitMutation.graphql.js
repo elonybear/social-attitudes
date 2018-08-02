@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 77c06d7d781cfe6e79d9556d5ed60fe5
+ * @relayHash 4e1596d032d839953246ae24c91e1f48
  */
 
 /* eslint-disable */
@@ -11,6 +11,7 @@
 import type { ConcreteRequest } from 'relay-runtime';
 export type CreateSkitInput = {
   title: string,
+  description: string,
   bots: $ReadOnlyArray<?string>,
   clientMutationId?: ?string,
 };
@@ -19,7 +20,31 @@ export type CreateSkitMutationVariables = {|
 |};
 export type CreateSkitMutationResponse = {|
   +createSkit: ?{|
-    +skitid: ?string
+    +skit: ?{|
+      +id: string,
+      +title: string,
+      +bots: ?{|
+        +edges: ?$ReadOnlyArray<?{|
+          +node: ?{|
+            +id: string,
+            +botid: string,
+            +name: string,
+          |}
+        |}>
+      |},
+      +description: ?string,
+      +messages: ?{|
+        +edges: ?$ReadOnlyArray<?{|
+          +node: ?{|
+            +id: string,
+            +text: string,
+            +author: string,
+          |}
+        |}>
+      |},
+      +last_updated: ?string,
+      +created: ?string,
+    |}
   |}
 |};
 */
@@ -30,7 +55,31 @@ mutation CreateSkitMutation(
   $input: CreateSkitInput!
 ) {
   createSkit(input: $input) {
-    skitid
+    skit {
+      id
+      title
+      bots {
+        edges {
+          node {
+            id
+            botid
+            name
+          }
+        }
+      }
+      description
+      messages {
+        edges {
+          node {
+            id
+            text
+            author
+          }
+        }
+      }
+      last_updated
+      created
+    }
   }
 }
 */
@@ -44,7 +93,14 @@ var v0 = [
     "defaultValue": null
   }
 ],
-v1 = [
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+},
+v2 = [
   {
     "kind": "LinkedField",
     "alias": null,
@@ -62,11 +118,140 @@ v1 = [
     "plural": false,
     "selections": [
       {
-        "kind": "ScalarField",
+        "kind": "LinkedField",
         "alias": null,
-        "name": "skitid",
+        "name": "skit",
+        "storageKey": null,
         "args": null,
-        "storageKey": null
+        "concreteType": "Skit",
+        "plural": false,
+        "selections": [
+          v1,
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "title",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "bots",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "BotConnection",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "edges",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "BotEdge",
+                "plural": true,
+                "selections": [
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "name": "node",
+                    "storageKey": null,
+                    "args": null,
+                    "concreteType": "Bot",
+                    "plural": false,
+                    "selections": [
+                      v1,
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "botid",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "name",
+                        "args": null,
+                        "storageKey": null
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "description",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "messages",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "MessageConnection",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "LinkedField",
+                "alias": null,
+                "name": "edges",
+                "storageKey": null,
+                "args": null,
+                "concreteType": "MessageEdge",
+                "plural": true,
+                "selections": [
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "name": "node",
+                    "storageKey": null,
+                    "args": null,
+                    "concreteType": "Message",
+                    "plural": false,
+                    "selections": [
+                      v1,
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "text",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "author",
+                        "args": null,
+                        "storageKey": null
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "last_updated",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "created",
+            "args": null,
+            "storageKey": null
+          }
+        ]
       }
     ]
   }
@@ -76,7 +261,7 @@ return {
   "operationKind": "mutation",
   "name": "CreateSkitMutation",
   "id": null,
-  "text": "mutation CreateSkitMutation(\n  $input: CreateSkitInput!\n) {\n  createSkit(input: $input) {\n    skitid\n  }\n}\n",
+  "text": "mutation CreateSkitMutation(\n  $input: CreateSkitInput!\n) {\n  createSkit(input: $input) {\n    skit {\n      id\n      title\n      bots {\n        edges {\n          node {\n            id\n            botid\n            name\n          }\n        }\n      }\n      description\n      messages {\n        edges {\n          node {\n            id\n            text\n            author\n          }\n        }\n      }\n      last_updated\n      created\n    }\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -84,16 +269,16 @@ return {
     "type": "SocialAttitudesRootMutation",
     "metadata": null,
     "argumentDefinitions": v0,
-    "selections": v1
+    "selections": v2
   },
   "operation": {
     "kind": "Operation",
     "name": "CreateSkitMutation",
     "argumentDefinitions": v0,
-    "selections": v1
+    "selections": v2
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'f2ade57ce9f2df53ef0be5ac4a07f71c';
+(node/*: any*/).hash = '401388aaffacc0b30b922c5ff4d041c5';
 module.exports = node;

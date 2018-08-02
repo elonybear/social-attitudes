@@ -1,6 +1,5 @@
 .conversation-list-wrapper {
   background-color: white;
-  height: 700px;
   border-radius: 2px;
   padding:15px;
 }
@@ -17,7 +16,7 @@
   font-size:30px;
 }
 
-.conversation-list-item {
+.skit-list-item {
   transition:height .25s ease;
   /* height:36px; */
   overflow:hidden;
@@ -34,7 +33,15 @@
   border-bottom: 1px solid #ededed;
 }
 
-.conversation-list-item:hover {
+.skit-list-item.clickable:hover {
   background-color:#ededed;
   cursor:pointer;
+}
+
+.table-cells {
+  overflow-y:scroll;
+}
+
+.h-600 {
+  height:600px;
 }

@@ -10,27 +10,59 @@ const mutation = graphql`
     $input: CreateSkitInput!
   ) {
     createSkit(input: $input) {
-      skitid
+      skit {
+        id,
+        title,
+        bots {
+          edges {
+            node {
+              id
+              botid,
+              name
+            }
+          }
+        },
+        description,
+        messages {
+          edges {
+            node {
+              id,
+              text,
+              author
+            }
+          }
+        },
+        last_updated,
+        created
+      }
   }
 }
 `
+
+function sharedUpdater(store, parentID, newNode){
+  console.log(newNode);
+  const parentProxy = store.get(parentID);
+  
+  const conn = ConnectionHandler.getConnection(
+    parentProxy,
+    'SkitList_skits',
+  );
+
+  const newEdge = ConnectionHandler.createEdge(
+    store,
+    conn,
+    newNode,
+    'SkitEdge'
+  );
+
+  ConnectionHandler.insertEdgeAfter(conn, newEdge);
+}
+
 
 export function createSkit(source, parentID, callback) {
   const variables = {
     input: source,
   };
-
-  const configs = [{
-    type: 'RANGE_ADD',
-    parentID: parentID,
-    connectionInfo: [{
-      key: 'SkitList_skits',
-      rangeBehavior: 'append',
-    }],
-    edgeName: 'newSkitEdge',
-  }];
-
-  console.log(configs)
 
   commitMutation(
     environment,
@@ -40,10 +72,19 @@ export function createSkit(source, parentID, callback) {
       onCompleted: (response, errors) => {
         console.log('Response received from server.')
         console.log(response);
-        callback(response);
+        callback(response.createSkit.skit.id);
       },
       onError: err => console.error(err),
-      configs
+      updater: (store) => {
+        // Get the payload returned from the server
+        const payload = store.getRootField('createSkit');
+
+        // Get the edge of the newly created Todo record
+        const newNode = payload.getLinkedRecord('skit');
+
+        // Add it to the user's skit list
+        sharedUpdater(store, parentID, newNode);
+      },
     },
   );
 }

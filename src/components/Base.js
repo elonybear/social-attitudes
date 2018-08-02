@@ -29,7 +29,7 @@ export default class Base extends React.Component {
     return (
       <div className="base">
         <Route path="/" component={Header} />
-        <div className="main-wrapper">
+        <div className="main-wrapper row">
           <div className="">
             <div className="col-md-2">
               <Route path="/" component={NavigationMenu} />
@@ -56,10 +56,12 @@ export default class Base extends React.Component {
                     return <div>{error.message}</div>;
                   } else if (props) {
                     return (
-                      <Switch>
-                        <Route path="/dashboard" render={this.renderPane.bind(this, Dashboard, props)} />
-                        <Route path="/skits" render={this.renderPane.bind(this, SkitList, props)}/>
-                      </Switch>
+                      <div>
+                        <Switch>
+                          <Route path="/dashboard" render={this.renderPane.bind(this, Dashboard, props)} />
+                          <Route path="/skits" render={this.renderPane.bind(this, SkitList, props)}/>
+                        </Switch>
+                      </div>
                     )
                   }
                   return <div>Loading</div>;
@@ -68,6 +70,7 @@ export default class Base extends React.Component {
             </div>
           </div>
         </div>
+        <Route path="*/test" render={() => <div>Test</div>} />
       </div>
     )
   }

@@ -11,10 +11,12 @@ import type { ConcreteFragment } from 'relay-runtime';
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type CreateSkitForm_bots$ref: FragmentReference;
 export type CreateSkitForm_bots = {|
+  +id: string,
   +bots: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
+        +botid: string,
         +name: string,
       |}
     |}>
@@ -24,17 +26,44 @@ export type CreateSkitForm_bots = {|
 */
 
 
-const node/*: ConcreteFragment*/ = {
+const node/*: ConcreteFragment*/ = (function(){
+var v0 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+};
+return {
   "kind": "Fragment",
   "name": "CreateSkitForm_bots",
   "type": "BotList",
-  "metadata": null,
-  "argumentDefinitions": [],
+  "metadata": {
+    "connection": [
+      {
+        "count": "rows",
+        "cursor": null,
+        "direction": "forward",
+        "path": [
+          "bots"
+        ]
+      }
+    ]
+  },
+  "argumentDefinitions": [
+    {
+      "kind": "LocalArgument",
+      "name": "rows",
+      "type": "Int",
+      "defaultValue": 100
+    }
+  ],
   "selections": [
+    v0,
     {
       "kind": "LinkedField",
-      "alias": null,
-      "name": "bots",
+      "alias": "bots",
+      "name": "__CreateSkitForm_bots_connection",
       "storageKey": null,
       "args": null,
       "concreteType": "BotConnection",
@@ -58,10 +87,11 @@ const node/*: ConcreteFragment*/ = {
               "concreteType": "Bot",
               "plural": false,
               "selections": [
+                v0,
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "name": "id",
+                  "name": "botid",
                   "args": null,
                   "storageKey": null
                 },
@@ -71,8 +101,47 @@ const node/*: ConcreteFragment*/ = {
                   "name": "name",
                   "args": null,
                   "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "__typename",
+                  "args": null,
+                  "storageKey": null
                 }
               ]
+            },
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "name": "cursor",
+              "args": null,
+              "storageKey": null
+            }
+          ]
+        },
+        {
+          "kind": "LinkedField",
+          "alias": null,
+          "name": "pageInfo",
+          "storageKey": null,
+          "args": null,
+          "concreteType": "PageInfo",
+          "plural": false,
+          "selections": [
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "name": "endCursor",
+              "args": null,
+              "storageKey": null
+            },
+            {
+              "kind": "ScalarField",
+              "alias": null,
+              "name": "hasNextPage",
+              "args": null,
+              "storageKey": null
             }
           ]
         }
@@ -80,6 +149,7 @@ const node/*: ConcreteFragment*/ = {
     }
   ]
 };
+})();
 // prettier-ignore
-(node/*: any*/).hash = '73937522b9e21df7baa29ab06c80d39d';
+(node/*: any*/).hash = '139c5291055efa39f2cf100df67f43b5';
 module.exports = node;
