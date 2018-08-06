@@ -9,7 +9,10 @@
 
 .skit-table {
   padding:15px;
-  max-height:700px;
+}
+
+.skit-table .table-cells {
+  max-height:650px;
 }
 
 .table-header {
@@ -36,4 +39,14 @@
 .title-input .form-control {
   font-size:30px;
   height:56px;
+}
+
+.message-action {
+  border-radius:0px;
+  width:34px;
+  height:34px;
+}
+
+.button-left {
+  border-radius:10px 0 0 10px;
 }

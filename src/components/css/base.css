@@ -48,7 +48,6 @@ html, body {
   padding: 6px 10px;
   margin-top: 8px;
   cursor: pointer;
-  border-radius: 5px;
   transition:background-color .2s;
   display:inline-block;
   color: white;
@@ -94,6 +93,10 @@ textarea {
 
 .m-t-25 {
   margin-top:25px;
+}
+
+.m-b-25 {
+  margin-bottom:25px;
 }
 
 .text-button {
@@ -144,4 +147,20 @@ textarea {
 
 .m-t-10 {
   margin-top:10px;
+}
+
+.p-10 {
+  padding:10px;
+}
+
+.m-t-5 {
+  margin-top:5px;
+}
+
+.m-b-10 {
+  margin-bottom:10px;
+}
+
+.button-large {
+  font-size:20px;
 }

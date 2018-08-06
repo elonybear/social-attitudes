@@ -8,7 +8,6 @@
 
 /*::
 import type { ConcreteFragment } from 'relay-runtime';
-type Skit_skit$ref = any;
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type SkitList_skits$ref: FragmentReference;
 export type SkitList_skits = {|
@@ -36,7 +35,6 @@ export type SkitList_skits = {|
             |}
           |}>
         |},
-        +$fragmentRefs: Skit_skit$ref,
       |}
     |}>
   |},
@@ -258,11 +256,6 @@ return {
                     }
                   ]
                 },
-                {
-                  "kind": "FragmentSpread",
-                  "name": "Skit_skit",
-                  "args": null
-                },
                 v1
               ]
             },
@@ -276,5 +269,5 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'c6f4a5bd751fc17966176565bd85216d';
+(node/*: any*/).hash = '9af341600fff3f1d442adbb04a8880d4';
 module.exports = node;

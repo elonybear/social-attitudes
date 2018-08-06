@@ -74,10 +74,14 @@ class Skit extends React.Component {
     this.setState({[field]: event.target.value})
   }
 
+  handlePreviewClick() {
+
+  }
+
   renderTitle(skit) {
     return (
       <span
-        className="clickable" onClick={this.handleTextClick.bind(this, 'editingTitle')}>
+        className="clickable col-md-12" onClick={this.handleTextClick.bind(this, 'editingTitle')}>
         {skit.title}
       </span>
     )
@@ -86,7 +90,7 @@ class Skit extends React.Component {
   renderTitleForm() {
     return (
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div className="form-group title-input">
             <input
               type="text"
@@ -103,13 +107,13 @@ class Skit extends React.Component {
   }
 
   renderDescription(skit) {
-    return <div onClick={this.handleTextClick.bind(this, 'editingDescription')}>{skit.description}</div>
+    return <div className="col-md-12" onClick={this.handleTextClick.bind(this, 'editingDescription')}>{skit.description}</div>
   }
 
   renderDescriptionForm() {
     return (
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div className="form-group description-input">
             <textarea
               type="text"
@@ -132,16 +136,23 @@ class Skit extends React.Component {
         <div onClick={this.handleBackButton.bind(this)} className="clickable">
           <i className="fas fa-chevron-left m-r-5"></i>Back to list
         </div>
-        <div className="content-title rounded m-b-md">
-          {!this.state.editingTitle && this.renderTitle(skit)}
-          {this.state.editingTitle && this.renderTitleForm(skit)}
-          <div className="skit-description clickable m-t-10">
-            {!this.state.editingDescription && this.renderDescription(skit)}
-            {this.state.editingDescription && this.renderDescriptionForm()}
+        <div className="row content-title rounded m-b-md">
+          <div className="col-md-8">
+            {!this.state.editingTitle && this.renderTitle(skit)}
+            {this.state.editingTitle && this.renderTitleForm(skit)}
+            <span className="skit-description clickable m-t-10">
+              {!this.state.editingDescription && this.renderDescription(skit)}
+              {this.state.editingDescription && this.renderDescriptionForm()}
+            </span>
+          </div>
+          <div className="col-md-4">
+            <span
+              className="rounded button button-success pull-right outset button-large"
+              onClick={this.handlePreviewClick.bind(this)}><i className="fas fa-search m-r-5"></i> Preview</span>
           </div>
         </div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="row">
               <div className="skit-bots col-md-12">
                 <BotList {...this.props} />

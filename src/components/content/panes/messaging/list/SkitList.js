@@ -87,7 +87,7 @@ class SkitList extends React.Component {
           <div className="content-title rounded m-b-md">
             Skits
             <span
-              className="button button-success pull-right outset"
+              className="rounded button button-success pull-right outset"
               onClick={this.handleCreateClick.bind(this)}><i className="fas fa-plus m-r-5"></i> Create New Skit</span>
           </div>
           <div className="row table-headers m-lr-5">
@@ -125,7 +125,7 @@ class SkitList extends React.Component {
             return <div>{error.message}</div>;
           } else if (props) {
             return (
-              <Skit {...routeProps} skit={props.node} bots={this.props.bots.bots}/>
+              <Skit {...routeProps} skit={props.node} bots={this.props.bots}/>
             )
           }
           return <div>Loading</div>;
@@ -183,7 +183,6 @@ export default createFragmentContainer(SkitList, {
                 }
               }
             },
-            ...Skit_skit
           }
         }
       }
@@ -193,6 +192,7 @@ export default createFragmentContainer(SkitList, {
     fragment SkitList_bots on BotList @argumentDefinitions(
         rows: {type: "Int", defaultValue: 100}
       ){
+      id,
       bots (first: $rows) @connection(key: "SkitList_bots", filters: []){
         edges {
           node {
