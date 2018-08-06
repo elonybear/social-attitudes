@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 134e88a34425a35ed3ca741f3107bda1
+ * @relayHash 1e992a6cf15bafcfbf976f39b90d975c
  */
 
 /* eslint-disable */
@@ -18,10 +18,12 @@ export type CreateBotMutationVariables = {|
 |};
 export type CreateBotMutationResponse = {|
   +createBot: ?{|
-    +bot: ?{|
-      +id: string,
-      +botid: string,
-      +name: string,
+    +newBotEdge: ?{|
+      +node: ?{|
+        +id: string,
+        +botid: string,
+        +name: string,
+      |}
     |}
   |}
 |};
@@ -33,10 +35,12 @@ mutation CreateBotMutation(
   $input: CreateBotInput!
 ) {
   createBot(input: $input) {
-    bot {
-      id
-      botid
-      name
+    newBotEdge {
+      node {
+        id
+        botid
+        name
+      }
     }
   }
 }
@@ -71,32 +75,43 @@ v1 = [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "bot",
+        "name": "newBotEdge",
         "storageKey": null,
         "args": null,
-        "concreteType": "Bot",
+        "concreteType": "BotEdge",
         "plural": false,
         "selections": [
           {
-            "kind": "ScalarField",
+            "kind": "LinkedField",
             "alias": null,
-            "name": "id",
+            "name": "node",
+            "storageKey": null,
             "args": null,
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "botid",
-            "args": null,
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "name",
-            "args": null,
-            "storageKey": null
+            "concreteType": "Bot",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "id",
+                "args": null,
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "botid",
+                "args": null,
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "name",
+                "args": null,
+                "storageKey": null
+              }
+            ]
           }
         ]
       }
@@ -108,7 +123,7 @@ return {
   "operationKind": "mutation",
   "name": "CreateBotMutation",
   "id": null,
-  "text": "mutation CreateBotMutation(\n  $input: CreateBotInput!\n) {\n  createBot(input: $input) {\n    bot {\n      id\n      botid\n      name\n    }\n  }\n}\n",
+  "text": "mutation CreateBotMutation(\n  $input: CreateBotInput!\n) {\n  createBot(input: $input) {\n    newBotEdge {\n      node {\n        id\n        botid\n        name\n      }\n    }\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -127,5 +142,5 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'e94ec04ddc76bc8973e4131fa99ad6fe';
+(node/*: any*/).hash = 'f5c9377defc0be26df43551e43c8b17c';
 module.exports = node;

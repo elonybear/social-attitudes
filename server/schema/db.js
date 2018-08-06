@@ -103,9 +103,11 @@ export function updateSkit({skitid, title, description}) {
   })
 }
 
-export function getBots() {
+export function getBots(botids) {
+  if (botids == null)
+    return DB.execute('SELECT * FROM bots').then(results => results.rows);
 
-  return DB.execute('SELECT * FROM bots').then(results => results.rows)
+  return DB.execute(`SELECT * FROM bots WHERE botid in (${botids.join(",")})`).then(results => results.rows)
 }
 
 export function getBot(botid) {

@@ -1,7 +1,9 @@
 import {
   mutationWithClientMutationId,
   fromGlobalId,
-  toGlobalId
+  toGlobalId,
+  connectionArgs,
+  connectionFromArray
 } from 'graphql-relay';
 
 import {
@@ -15,14 +17,15 @@ import {
 import {
   SkitType,
   SkitEdge,
-  BotType
+  BotType,
+  BotConnection
 } from '../../queries/types'
 
 import {
   updateSkit,
   getSkit,
-  getBot,
-  updateSkitBots
+  updateSkitBots,
+  getBots,
 } from '../../db'
 
 let inputFields = {
@@ -70,5 +73,29 @@ export var RemoveBotMutation = mutationWithClientMutationId({
           botid: victim
         }
     });
+  }
+})
+
+export var AddBotsMutation = mutationWithClientMutationId({
+  name: 'AddBots',
+  inputFields: {
+    'skitid': { type: new GraphQLNonNull(GraphQLString) },
+    'botids': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+    'newBots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) }
+  },
+  outputFields: {
+    bots: {
+      type: BotConnection,
+      resolve: ({bots}) => connectionFromArray(bots, connectionArgs)
+    }
+  },
+  mutateAndGetPayload: ({skitid, botids, newBots}) => {
+    let updatePromise = updateSkitBots(skitid, botids);
+    let botsPromise = getBots(newBots);
+    return Promise.all([updatePromise, botsPromise]).then(results => {
+      return {
+        bots: results[1]
+      }
+    })
   }
 })

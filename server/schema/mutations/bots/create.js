@@ -1,6 +1,7 @@
 import {
   mutationWithClientMutationId,
-  fromGlobalId
+  fromGlobalId,
+  cursorForObjectInConnection
 } from 'graphql-relay';
 
 import {
@@ -12,12 +13,14 @@ import {
 } from 'graphql';
 
 import {
-  BotType
+  BotType,
+  BotEdge
 } from '../../queries/types'
 
 import {
   createBot,
-  getBot
+  getBot,
+  getBots
 } from '../../db'
 
 let inputFields = {
@@ -28,9 +31,21 @@ export var CreateBotMutation = mutationWithClientMutationId({
   name: 'CreateBot',
   inputFields: inputFields,
   outputFields: {
-    bot: {
-      type: BotType,
-      resolve: ({botid}) => getBot(botid)
+    newBotEdge: {
+      type: BotEdge,
+      resolve: ({botid}) => {
+        let botPromise = getBot(botid);
+        let botsPromise = getBots();
+        return Promise.all([botPromise, botsPromise])
+          .then(results => {
+            let bot = results[0];
+            let bots = results[1]
+            return {
+              node: bot,
+              cursor: cursorForObjectInConnection(bots, bot),
+            }
+          })
+      }
     }
   },
   mutateAndGetPayload: ({name}) => {

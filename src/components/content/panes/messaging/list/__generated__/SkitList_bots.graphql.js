@@ -12,6 +12,7 @@ type CreateSkitForm_bots$ref = any;
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type SkitList_bots$ref: FragmentReference;
 export type SkitList_bots = {|
+  +id: string,
   +bots: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
@@ -27,7 +28,15 @@ export type SkitList_bots = {|
 */
 
 
-const node/*: ConcreteFragment*/ = {
+const node/*: ConcreteFragment*/ = (function(){
+var v0 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+};
+return {
   "kind": "Fragment",
   "name": "SkitList_bots",
   "type": "BotList",
@@ -52,6 +61,7 @@ const node/*: ConcreteFragment*/ = {
     }
   ],
   "selections": [
+    v0,
     {
       "kind": "LinkedField",
       "alias": "bots",
@@ -79,13 +89,7 @@ const node/*: ConcreteFragment*/ = {
               "concreteType": "Bot",
               "plural": false,
               "selections": [
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "name": "id",
-                  "args": null,
-                  "storageKey": null
-                },
+                v0,
                 {
                   "kind": "ScalarField",
                   "alias": null,
@@ -152,6 +156,7 @@ const node/*: ConcreteFragment*/ = {
     }
   ]
 };
+})();
 // prettier-ignore
-(node/*: any*/).hash = '58e6df6ec6c6aaf5026b037eb4f558cd';
+(node/*: any*/).hash = '40896f2034be39f5e471ca63849943ca';
 module.exports = node;

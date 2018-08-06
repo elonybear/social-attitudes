@@ -15,21 +15,6 @@ const mutation = graphql`
 }
 `
 
-// function sharedUpdater(store, parentID, victim) {
-//   console.log(parentID);
-//   console.log(victim);
-//   const parentProxy = store.get(parentID);
-//
-//   const connSkit= ConnectionHandler.getConnection(
-//     parentProxy,
-//     'Skit_bots',
-//   );
-//
-//   console.log(connSkit)
-//
-//   ConnectionHandler.deleteNode(connSkit, victim);
-// }
-
 export function removeBot(source, parentID, callback) {
   const variables = {
     input: source,

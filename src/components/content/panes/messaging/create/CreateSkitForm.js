@@ -113,7 +113,7 @@ class CreateSkitForm extends React.Component {
           {bots}
         </div>
         <div
-          className={"button button-danger" + (this.state.addedBotsSelected.length == 0 ? " disabled" : "")}
+          className={"rounded button button-danger" + (this.state.addedBotsSelected.length == 0 ? " disabled" : "")}
           onClick={(this.state.addedBotsSelected.length > 0 ? this.removeBot.bind(this) : () => {})}>
           <i className="fas fa-minus-circle m-r-5"></i>Remove
         </div>
@@ -145,7 +145,6 @@ class CreateSkitForm extends React.Component {
     } else {
       $('.create-bot').slideUp();
     }
-
   }
 
   render() {
@@ -155,11 +154,11 @@ class CreateSkitForm extends React.Component {
           <div className="content-title rounded m-b-md">
             Create Skit
             <span
-              className="button button-danger pull-right outset m-l-10"
+              className="rounded button button-danger pull-right outset m-l-10"
               onClick={this.handleCancelClick.bind(this)}>
               <i className="fas fa-ban m-r-5"></i>Cancel</span>
               <span
-                className="button button-success pull-right outset"
+                className="rounded button button-success pull-right outset"
                 onClick={this.handleSaveClick.bind(this)}>
                 <i className="fas fa-save m-r-5"></i>Save
               </span>
@@ -202,14 +201,13 @@ class CreateSkitForm extends React.Component {
                       {this.renderAvailableBots()}
                     </div>
                     <div
-                      className={"button button-success" + (this.state.availableBotsSelected.length == 0 ? " disabled" : "")}
+                      className={"rounded button button-success" + (this.state.availableBotsSelected.length == 0 ? " disabled" : "")}
                       onClick={(this.state.availableBotsSelected.length > 0 ? this.addBot.bind(this) : () => {})}>
                       <i className="fas fa-plus-circle m-r-5"></i>Add
                     </div>
                     <span
-                      className="m-l-10"
-                      onClick={this.toggleCreateBot.bind(this)}>
-                      Don't see the one you want? <span className="text-button text-success">Create it here.</span>
+                      className="m-l-10">
+                      Don't see the one you want? <span onClick={this.toggleCreateBot.bind(this)} className="text-button text-success">Create it here.</span>
                     </span>
                   </div>
                 </div>
@@ -230,12 +228,12 @@ class CreateSkitForm extends React.Component {
                     </div>
                   </div>
                   <div
-                    className={"button button-success m-l-10 m-t-25"}
+                    className={"roundedbutton button-success m-l-10 m-t-25"}
                     onClick={this.handleCreateBot.bind(this)}>
                     <i className="fas fa-check"></i>
                   </div>
                   <div
-                    className={"button button-danger m-l-10 m-t-25"}
+                    className={"rounded button button-danger m-l-10 m-t-25"}
                     onClick={this.handleCancelBot.bind(this)}>
                     <i className="fas fa-times"></i>
                   </div>

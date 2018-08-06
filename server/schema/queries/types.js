@@ -140,7 +140,7 @@ export var {connectionType: MessageConnection} =
     interfaces: [nodeInterface],
   });
 
-  export var {connectionType: BotConnection} =
+  export var {connectionType: BotConnection, edgeType: BotEdge} =
     connectionDefinitions({name: 'Bot', nodeType: BotType})
 
   export const BotListType = new GraphQLObjectType({

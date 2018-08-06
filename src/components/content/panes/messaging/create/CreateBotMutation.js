@@ -10,37 +10,35 @@ const mutation = graphql`
     $input: CreateBotInput!
   ) {
     createBot(input: $input) {
-      bot {
-        id,
-        botid,
-        name
+      newBotEdge {
+        node {
+          id,
+          botid,
+          name
+        }
       }
   }
 }
 `
-
-function sharedUpdater(store, parentID, newNode) {
-  const parentProxy = store.get(parentID);
-  const newEdge = ConnectionHandler.createEdge(
-    store,
-    parentProxy,
-    newNode,
-    'BotEdge'
-  );
-
-  const connForm = ConnectionHandler.getConnection(
-    parentProxy,
-    'CreateSkitForm_bots',
-  );
-
-  ConnectionHandler.insertEdgeAfter(connForm, newEdge);
-}
 
 
 export function createBot(source, parentID, callback) {
   const variables = {
     input: source,
   };
+
+  const configs = [{
+    type: 'RANGE_ADD',
+    parentID: parentID,
+    connectionInfo: [{
+      key: 'CreateSkitForm_bots',
+      rangeBehavior: 'append',
+    }, {
+      key: 'SkitList_bots',
+      rangeBehavior: 'append'
+    }],
+    edgeName: 'newBotEdge',
+  }];
 
   commitMutation(
     environment,
@@ -50,19 +48,10 @@ export function createBot(source, parentID, callback) {
       onCompleted: (response, errors) => {
         console.log('Response received from server.')
         console.log(response);
-        callback(response.createBot.bot.botid);
+        callback(response.createBot.newBotEdge.node.botid);
       },
       onError: err => console.error(err),
-      updater: (store) => {
-        // Get the payload returned from the server
-        const payload = store.getRootField('createBot');
-
-        // Get the edge of the newly created Todo record
-        const newNode = payload.getLinkedRecord('bot');
-
-        // Add it to the user's todo list
-        sharedUpdater(store, parentID, newNode);
-      },
+      configs
     },
   );
 }
