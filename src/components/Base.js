@@ -29,7 +29,7 @@ export default class Base extends React.Component {
     return (
       <div className="base">
         <Route path="/" component={Header} />
-        <div className="main-wrapper row">
+        <div className="main-wrapper">
           <div className="">
             <div className="col-md-2">
               <Route path="/" component={NavigationMenu} />

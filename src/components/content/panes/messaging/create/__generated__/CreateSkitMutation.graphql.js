@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash b7e6a5eb84a82e0bc20b055664ce9dfa
+ * @relayHash 260c608b6a1be8c1a460115afc5de0f4
  */
 
 /* eslint-disable */
@@ -34,7 +34,7 @@ export type CreateSkitMutationResponse = {|
             |}
           |}>
         |},
-        +messages: ?{|
+        +SkitList_messages: ?{|
           +edges: ?$ReadOnlyArray<?{|
             +node: ?{|
               +id: string
@@ -74,11 +74,17 @@ mutation CreateSkitMutation(
             hasNextPage
           }
         }
-        messages {
+        SkitList_messages: messages(first: 100) {
           edges {
             node {
               id
+              __typename
             }
+            cursor
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
           }
         }
         ...Skit_skit
@@ -109,14 +115,21 @@ fragment Skit_skit on Skit {
     }
   }
   description
-  messages {
+  messages(first: 100) {
     edges {
       node {
         id
+        messageid
         text
         author
         delay
+        __typename
       }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
@@ -215,6 +228,34 @@ v9 = {
 },
 v10 = [
   {
+    "kind": "LinkedField",
+    "alias": null,
+    "name": "edges",
+    "storageKey": null,
+    "args": null,
+    "concreteType": "MessageEdge",
+    "plural": true,
+    "selections": [
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "node",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "Message",
+        "plural": false,
+        "selections": [
+          v2,
+          v7
+        ]
+      },
+      v8
+    ]
+  },
+  v9
+],
+v11 = [
+  {
     "kind": "Literal",
     "name": "first",
     "value": 100,
@@ -226,7 +267,7 @@ return {
   "operationKind": "mutation",
   "name": "CreateSkitMutation",
   "id": null,
-  "text": "mutation CreateSkitMutation(\n  $input: CreateSkitInput!\n) {\n  createSkit(input: $input) {\n    newSkitEdge {\n      node {\n        id\n        title\n        created\n        last_updated\n        SkitList_bots: bots(first: 100) {\n          edges {\n            node {\n              botid\n              id\n              __typename\n            }\n            cursor\n          }\n          pageInfo {\n            endCursor\n            hasNextPage\n          }\n        }\n        messages {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n        ...Skit_skit\n      }\n    }\n  }\n}\n\nfragment Skit_skit on Skit {\n  id\n  skitid\n  title\n  created\n  last_updated\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  description\n  messages {\n    edges {\n      node {\n        id\n        text\n        author\n        delay\n      }\n    }\n  }\n}\n",
+  "text": "mutation CreateSkitMutation(\n  $input: CreateSkitInput!\n) {\n  createSkit(input: $input) {\n    newSkitEdge {\n      node {\n        id\n        title\n        created\n        last_updated\n        SkitList_bots: bots(first: 100) {\n          edges {\n            node {\n              botid\n              id\n              __typename\n            }\n            cursor\n          }\n          pageInfo {\n            endCursor\n            hasNextPage\n          }\n        }\n        SkitList_messages: messages(first: 100) {\n          edges {\n            node {\n              id\n              __typename\n            }\n            cursor\n          }\n          pageInfo {\n            endCursor\n            hasNextPage\n          }\n        }\n        ...Skit_skit\n      }\n    }\n  }\n}\n\nfragment Skit_skit on Skit {\n  id\n  skitid\n  title\n  created\n  last_updated\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  description\n  messages(first: 100) {\n    edges {\n      node {\n        id\n        messageid\n        text\n        author\n        delay\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
   "metadata": {
     "connection": [
       {
@@ -238,6 +279,17 @@ return {
           "newSkitEdge",
           "node",
           "SkitList_bots"
+        ]
+      },
+      {
+        "count": null,
+        "cursor": null,
+        "direction": "forward",
+        "path": [
+          "createSkit",
+          "newSkitEdge",
+          "node",
+          "SkitList_messages"
         ]
       }
     ]
@@ -319,37 +371,13 @@ return {
                   },
                   {
                     "kind": "LinkedField",
-                    "alias": null,
-                    "name": "messages",
+                    "alias": "SkitList_messages",
+                    "name": "__Skit_SkitList_messages_connection",
                     "storageKey": null,
                     "args": null,
                     "concreteType": "MessageConnection",
                     "plural": false,
-                    "selections": [
-                      {
-                        "kind": "LinkedField",
-                        "alias": null,
-                        "name": "edges",
-                        "storageKey": null,
-                        "args": null,
-                        "concreteType": "MessageEdge",
-                        "plural": true,
-                        "selections": [
-                          {
-                            "kind": "LinkedField",
-                            "alias": null,
-                            "name": "node",
-                            "storageKey": null,
-                            "args": null,
-                            "concreteType": "Message",
-                            "plural": false,
-                            "selections": [
-                              v2
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "selections": v10
                   },
                   {
                     "kind": "FragmentSpread",
@@ -405,7 +433,7 @@ return {
                     "alias": "SkitList_bots",
                     "name": "bots",
                     "storageKey": "bots(first:100)",
-                    "args": v10,
+                    "args": v11,
                     "concreteType": "BotConnection",
                     "plural": false,
                     "selections": [
@@ -442,65 +470,29 @@ return {
                     "kind": "LinkedHandle",
                     "alias": "SkitList_bots",
                     "name": "bots",
-                    "args": v10,
+                    "args": v11,
                     "handle": "connection",
                     "key": "Skit_SkitList_bots",
                     "filters": null
                   },
                   {
                     "kind": "LinkedField",
-                    "alias": null,
+                    "alias": "SkitList_messages",
                     "name": "messages",
-                    "storageKey": null,
-                    "args": null,
+                    "storageKey": "messages(first:100)",
+                    "args": v11,
                     "concreteType": "MessageConnection",
                     "plural": false,
-                    "selections": [
-                      {
-                        "kind": "LinkedField",
-                        "alias": null,
-                        "name": "edges",
-                        "storageKey": null,
-                        "args": null,
-                        "concreteType": "MessageEdge",
-                        "plural": true,
-                        "selections": [
-                          {
-                            "kind": "LinkedField",
-                            "alias": null,
-                            "name": "node",
-                            "storageKey": null,
-                            "args": null,
-                            "concreteType": "Message",
-                            "plural": false,
-                            "selections": [
-                              v2,
-                              {
-                                "kind": "ScalarField",
-                                "alias": null,
-                                "name": "text",
-                                "args": null,
-                                "storageKey": null
-                              },
-                              {
-                                "kind": "ScalarField",
-                                "alias": null,
-                                "name": "author",
-                                "args": null,
-                                "storageKey": null
-                              },
-                              {
-                                "kind": "ScalarField",
-                                "alias": null,
-                                "name": "delay",
-                                "args": null,
-                                "storageKey": null
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "selections": v10
+                  },
+                  {
+                    "kind": "LinkedHandle",
+                    "alias": "SkitList_messages",
+                    "name": "messages",
+                    "args": v11,
+                    "handle": "connection",
+                    "key": "Skit_SkitList_messages",
+                    "filters": null
                   },
                   {
                     "kind": "ScalarField",
@@ -514,7 +506,7 @@ return {
                     "alias": null,
                     "name": "bots",
                     "storageKey": "bots(first:100)",
-                    "args": v10,
+                    "args": v11,
                     "concreteType": "BotConnection",
                     "plural": false,
                     "selections": [
@@ -558,7 +550,7 @@ return {
                     "kind": "LinkedHandle",
                     "alias": null,
                     "name": "bots",
-                    "args": v10,
+                    "args": v11,
                     "handle": "connection",
                     "key": "Skit_bots",
                     "filters": null
@@ -569,6 +561,80 @@ return {
                     "name": "description",
                     "args": null,
                     "storageKey": null
+                  },
+                  {
+                    "kind": "LinkedField",
+                    "alias": null,
+                    "name": "messages",
+                    "storageKey": "messages(first:100)",
+                    "args": v11,
+                    "concreteType": "MessageConnection",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "LinkedField",
+                        "alias": null,
+                        "name": "edges",
+                        "storageKey": null,
+                        "args": null,
+                        "concreteType": "MessageEdge",
+                        "plural": true,
+                        "selections": [
+                          {
+                            "kind": "LinkedField",
+                            "alias": null,
+                            "name": "node",
+                            "storageKey": null,
+                            "args": null,
+                            "concreteType": "Message",
+                            "plural": false,
+                            "selections": [
+                              v2,
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "messageid",
+                                "args": null,
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "text",
+                                "args": null,
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "author",
+                                "args": null,
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ScalarField",
+                                "alias": null,
+                                "name": "delay",
+                                "args": null,
+                                "storageKey": null
+                              },
+                              v7
+                            ]
+                          },
+                          v8
+                        ]
+                      },
+                      v9
+                    ]
+                  },
+                  {
+                    "kind": "LinkedHandle",
+                    "alias": null,
+                    "name": "messages",
+                    "args": v11,
+                    "handle": "connection",
+                    "key": "Skit_messages",
+                    "filters": null
                   }
                 ]
               }
@@ -581,5 +647,5 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '9c698917594278a95532079db0d80d14';
+(node/*: any*/).hash = 'f7b4f2bc0b3d7c770a6f93df15f30788';
 module.exports = node;

@@ -3,10 +3,20 @@ import {createFragmentContainer, graphql} from 'react-relay';
 import BotList from './skit/BotList'
 import MessageList from './skit/MessageList'
 import environment from '../../../../../environment'
+import MessageWindow from './skit/MessageWindow'
 
 import {updateSkit} from './skit/UpdateSkitMutation'
 
 import './css/skit.css';
+
+class Message {
+  constructor(type, author, text, delay) {
+    this.type = type;
+    this.author = author;
+    this.text = text;
+    this.delay = delay;
+  }
+}
 
 class Skit extends React.Component {
 
@@ -17,16 +27,19 @@ class Skit extends React.Component {
       originalDescription: props.skit.description,
       title: props.skit.title,
       description: props.skit.description,
-      mouseOverTitle: false,
-      mouseOverDescription:false,
       editingTitle: false,
-      editingDescription: false
+      editingDescription: false,
+      preview: false
     }
   }
 
   componentDidMount() {
     document.getElementById("skit").addEventListener("click", this.handleTextClick.bind(this, null));
     document.getElementById("skit").addEventListener("keyup", this.handleKeypress.bind(this));
+  }
+
+  handlePreviewClick() {
+    this.setState({preview: !this.state.preview})
   }
 
   handleBackButton() {
@@ -74,8 +87,19 @@ class Skit extends React.Component {
     this.setState({[field]: event.target.value})
   }
 
-  handlePreviewClick() {
+  getBotForMessage(botid) {
+    return this.props.bots.bots.edges.find(bot => bot.node.botid == botid).node;
+  }
 
+  processMessages() {
+    return this.props.skit.messages.edges.map(message => {
+      return new Message(
+        'receive',
+        this.getBotForMessage(message.node.author).name,
+        message.node.text,
+        message.node.delay
+      )
+    })
   }
 
   renderTitle(skit) {
@@ -146,12 +170,17 @@ class Skit extends React.Component {
             </span>
           </div>
           <div className="col-md-4">
-            <span
+            {!this.state.preview && <span
               className="rounded button button-success pull-right outset button-large"
-              onClick={this.handlePreviewClick.bind(this)}><i className="fas fa-search m-r-5"></i> Preview</span>
+              onClick={this.handlePreviewClick.bind(this)}><i className="fas fa-search m-r-5"></i> Preview</span>}
+            {this.state.preview && <span
+              className="rounded button button-danger pull-right outset button-large"
+              onClick={this.handlePreviewClick.bind(this)}><i class="fas fa-sign-out-alt m-r-5"></i> Exit</span>}
           </div>
         </div>
-        <div className="row">
+
+        {this.state.preview && <MessageWindow messages={this.processMessages()}/>}
+        {!this.state.preview && <div className="row">
           <div className="col-md-12">
             <div className="row">
               <div className="skit-bots col-md-12">
@@ -164,7 +193,7 @@ class Skit extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     )
   }
@@ -190,10 +219,11 @@ export default createFragmentContainer(Skit, {
         }
       },
       description,
-      messages {
+      messages(first:$rows) @connection(key: "Skit_messages") {
         edges {
           node {
             id,
+            messageid,
             text,
             author
             delay

@@ -1,12 +1,15 @@
 import React from 'react';
 
+import {addMessage} from './AddMessageMutation';
+import {removeMessage} from './RemoveMessageMutation'
+
 export default class MessageList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       message: "",
-      showForm: true,
+      showForm: false,
       botSelected: "",
       delay: "",
       availableBotsSelected: []
@@ -23,15 +26,28 @@ export default class MessageList extends React.Component {
   }
 
   handleCreateMessage() {
-
+    addMessage({
+      skitid: this.props.skit.skitid,
+      text: this.state.message,
+      author:this.state.botSelected,
+      delay:parseFloat(this.state.delay)
+    }, this.props.skit.id, () => this.handleCancelClick())
   }
 
   handleCancelClick() {
-    this.messageFormToggle();
+    $('.message-form').slideUp();
+    setTimeout(() => this.messageFormToggle(), 330)
+  }
+
+  handleRemoveMessage(messageid) {
+    removeMessage({
+      skitid: this.props.skit.skitid,
+      messageid: messageid
+    }, this.props.skit.id, () => console.log("It worked???"))
   }
 
   messageFormToggle() {
-    this.setState({showForm: !this.state.showForm})
+    this.setState({showForm: !this.state.showForm, message: "", botSelected: "", delay: ""});
   }
 
   renderMessages() {
@@ -41,13 +57,30 @@ export default class MessageList extends React.Component {
         <div>
           <div className="no-results">
             <div className="italic m-b-5">There are no messages in this skit.</div>
-            <div className="text-button text-success" onClick={this.messageFormToggle.bind(this)}>
+            <div className="text-button text-success" onClick={this.handleAddMessage.bind(this)}>
               <i className="fas fa-plus-circle m-r-5"></i>Add one now.
             </div>
           </div>
         </div>
       )
     }
+
+    console.log(skit.messages)
+
+    return skit.messages.edges
+      .map(message => {
+        return (
+          <div key={message.node.messageid} className="skit-list-item">
+            <div className="col-md-5"><span className="table-datum">{message.node.text}</span></div>
+            <div className="col-md-3"><span className="table-datum">{this.props.bots.bots.edges.find(bot => bot.node.botid === message.node.author).node.name}</span></div>
+            <div className="col-md-2"><span className="table-datum">{message.node.delay}</span></div>
+            <div className="col-md-1" style={{color: '#EB1E32'}}>
+              <span onClick={this.handleRemoveMessage.bind(this, message.node.messageid)}><i className="fas fa-minus-circle clickable" ></i></span>
+            </div>
+            <div className="col-md-3"></div>
+          </div>
+        )
+      })
   }
 
   renderAvailableBots() {
@@ -74,9 +107,28 @@ export default class MessageList extends React.Component {
     )
   }
 
+  handleAddMessage() {
+    $('.message-form').slideDown();
+    this.messageFormToggle();
+  }
+
+  renderAddButton() {
+    return (
+      <div className="">
+        <div key="add-bot" className="skit-list-item">
+          <div className="col-md-5" onClick={this.handleAddMessage.bind(this)}>
+            {!this.state.showForm && <span className="text-button text-success">
+              <i className="fas fa-plus-circle m-r-5"></i>Add Message
+            </span>}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   renderMessageForm() {
     return (
-      <div className="message-form">
+      <div className="message-form" style={{display: "none"}}>
         <div className="row create-message m-t-5">
           <div className="col-md-12">
             <div className="col-md-5">
@@ -110,7 +162,7 @@ export default class MessageList extends React.Component {
                 onClick={this.handleCancelClick.bind(this)}>
                 <i className="fas fa-ban m-r-5"></i>Cancel</span>
               <div
-                className={"button button-success rounded pull-right"}
+                className={"button button-success outset rounded pull-right"}
                 onClick={this.handleCreateMessage.bind(this)}>
                 <i className="fas fa-plus-circle m-r-5"></i>Create
               </div>
@@ -136,7 +188,8 @@ export default class MessageList extends React.Component {
         </div>
         <div className="row table-cells">
           {this.renderMessages()}
-          {this.state.showForm && this.renderMessageForm()}
+          {this.props.skit.messages.edges.length > 0 && this.renderAddButton()}
+          {this.renderMessageForm()}
         </div>
       </div>
     )

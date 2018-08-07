@@ -118,7 +118,7 @@ const MessageType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 })
 
-export var {connectionType: MessageConnection} =
+export var {connectionType: MessageConnection, edgeType: MessageEdge} =
   connectionDefinitions({name: 'Message', nodeType: MessageType});
 
   export const BotType = new GraphQLObjectType({

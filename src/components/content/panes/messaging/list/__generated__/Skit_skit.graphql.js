@@ -30,6 +30,7 @@ export type Skit_skit = {|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
+        +messageid: string,
         +text: string,
         +author: string,
         +delay: number,
@@ -48,6 +49,45 @@ var v0 = {
   "name": "id",
   "args": null,
   "storageKey": null
+},
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "__typename",
+  "args": null,
+  "storageKey": null
+},
+v2 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "cursor",
+  "args": null,
+  "storageKey": null
+},
+v3 = {
+  "kind": "LinkedField",
+  "alias": null,
+  "name": "pageInfo",
+  "storageKey": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "endCursor",
+      "args": null,
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "hasNextPage",
+      "args": null,
+      "storageKey": null
+    }
+  ]
 };
 return {
   "kind": "Fragment",
@@ -61,6 +101,14 @@ return {
         "direction": "forward",
         "path": [
           "bots"
+        ]
+      },
+      {
+        "count": "rows",
+        "cursor": null,
+        "direction": "forward",
+        "path": [
+          "messages"
         ]
       }
     ]
@@ -145,49 +193,13 @@ return {
                   "args": null,
                   "storageKey": null
                 },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "name": "__typename",
-                  "args": null,
-                  "storageKey": null
-                }
+                v1
               ]
             },
-            {
-              "kind": "ScalarField",
-              "alias": null,
-              "name": "cursor",
-              "args": null,
-              "storageKey": null
-            }
+            v2
           ]
         },
-        {
-          "kind": "LinkedField",
-          "alias": null,
-          "name": "pageInfo",
-          "storageKey": null,
-          "args": null,
-          "concreteType": "PageInfo",
-          "plural": false,
-          "selections": [
-            {
-              "kind": "ScalarField",
-              "alias": null,
-              "name": "endCursor",
-              "args": null,
-              "storageKey": null
-            },
-            {
-              "kind": "ScalarField",
-              "alias": null,
-              "name": "hasNextPage",
-              "args": null,
-              "storageKey": null
-            }
-          ]
-        }
+        v3
       ]
     },
     {
@@ -199,8 +211,8 @@ return {
     },
     {
       "kind": "LinkedField",
-      "alias": null,
-      "name": "messages",
+      "alias": "messages",
+      "name": "__Skit_messages_connection",
       "storageKey": null,
       "args": null,
       "concreteType": "MessageConnection",
@@ -228,6 +240,13 @@ return {
                 {
                   "kind": "ScalarField",
                   "alias": null,
+                  "name": "messageid",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
                   "name": "text",
                   "args": null,
                   "storageKey": null
@@ -245,16 +264,19 @@ return {
                   "name": "delay",
                   "args": null,
                   "storageKey": null
-                }
+                },
+                v1
               ]
-            }
+            },
+            v2
           ]
-        }
+        },
+        v3
       ]
     }
   ]
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '9959e6f9d93701dafc4003c76af5aee7';
+(node/*: any*/).hash = '37c51cbd67356241691c2ad7f64ef199';
 module.exports = node;

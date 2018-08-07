@@ -7,6 +7,10 @@
   display:inline-block;
 }
 
+.healthy {
+  display:inline-block;
+}
+
 .skit-table {
   padding:15px;
 }

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 70002cc9b3f2bc6cc0314f8ba2bf5400
+ * @relayHash 9bf3607c135b1718224675fbc51fa1b1
  */
 
 /* eslint-disable */
@@ -90,11 +90,17 @@ fragment SkitList_skits on SkitList {
             hasNextPage
           }
         }
-        messages {
+        SkitList_messages: messages(first: 100) {
           edges {
             node {
               id
+              __typename
             }
+            cursor
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
           }
         }
         __typename
@@ -257,7 +263,7 @@ return {
   "operationKind": "query",
   "name": "Base_Query",
   "id": null,
-  "text": "query Base_Query {\n  users {\n    ...Dashboard_users\n    ...UserList_users\n    id\n  }\n  skits {\n    ...SkitList_skits\n    id\n  }\n  bots {\n    ...SkitList_bots\n    id\n  }\n}\n\nfragment Dashboard_users on UserList {\n  count\n}\n\nfragment UserList_users on UserList {\n  userList(first: 5) {\n    edges {\n      node {\n        id\n        ...User_user\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment SkitList_skits on SkitList {\n  id\n  skits(first: 100) {\n    edges {\n      node {\n        id\n        title\n        created\n        last_updated\n        SkitList_bots: bots(first: 100) {\n          edges {\n            node {\n              id\n              botid\n              name\n              __typename\n            }\n            cursor\n          }\n          pageInfo {\n            endCursor\n            hasNextPage\n          }\n        }\n        messages {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment SkitList_bots on BotList {\n  id\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...CreateSkitForm_bots\n}\n\nfragment CreateSkitForm_bots on BotList {\n  id\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment User_user on User {\n  first_name\n  last_name\n}\n",
+  "text": "query Base_Query {\n  users {\n    ...Dashboard_users\n    ...UserList_users\n    id\n  }\n  skits {\n    ...SkitList_skits\n    id\n  }\n  bots {\n    ...SkitList_bots\n    id\n  }\n}\n\nfragment Dashboard_users on UserList {\n  count\n}\n\nfragment UserList_users on UserList {\n  userList(first: 5) {\n    edges {\n      node {\n        id\n        ...User_user\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment SkitList_skits on SkitList {\n  id\n  skits(first: 100) {\n    edges {\n      node {\n        id\n        title\n        created\n        last_updated\n        SkitList_bots: bots(first: 100) {\n          edges {\n            node {\n              id\n              botid\n              name\n              __typename\n            }\n            cursor\n          }\n          pageInfo {\n            endCursor\n            hasNextPage\n          }\n        }\n        SkitList_messages: messages(first: 100) {\n          edges {\n            node {\n              id\n              __typename\n            }\n            cursor\n          }\n          pageInfo {\n            endCursor\n            hasNextPage\n          }\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment SkitList_bots on BotList {\n  id\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...CreateSkitForm_bots\n}\n\nfragment CreateSkitForm_bots on BotList {\n  id\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment User_user on User {\n  first_name\n  last_name\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -511,10 +517,10 @@ return {
                       },
                       {
                         "kind": "LinkedField",
-                        "alias": null,
+                        "alias": "SkitList_messages",
                         "name": "messages",
-                        "storageKey": null,
-                        "args": null,
+                        "storageKey": "messages(first:100)",
+                        "args": v5,
                         "concreteType": "MessageConnection",
                         "plural": false,
                         "selections": [
@@ -536,12 +542,24 @@ return {
                                 "concreteType": "Message",
                                 "plural": false,
                                 "selections": [
-                                  v0
+                                  v0,
+                                  v1
                                 ]
-                              }
+                              },
+                              v2
                             ]
-                          }
+                          },
+                          v6
                         ]
+                      },
+                      {
+                        "kind": "LinkedHandle",
+                        "alias": "SkitList_messages",
+                        "name": "messages",
+                        "args": v5,
+                        "handle": "connection",
+                        "key": "Skit_SkitList_messages",
+                        "filters": null
                       },
                       v1
                     ]

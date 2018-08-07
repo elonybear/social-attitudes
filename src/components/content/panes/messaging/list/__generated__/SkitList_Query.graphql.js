@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 48ffa04db5be66f35571abb2e2436b0c
+ * @relayHash 579cbfc02e9d5d2b42f08fde6622c15c
  */
 
 /* eslint-disable */
@@ -54,14 +54,21 @@ fragment Skit_skit on Skit {
     }
   }
   description
-  messages {
+  messages(first: 100) {
     edges {
       node {
         id
+        messageid
         text
         author
         delay
+        __typename
       }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
@@ -97,13 +104,53 @@ v3 = {
   "name": "id",
   "args": null,
   "storageKey": null
+},
+v4 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 100,
+    "type": "Int"
+  }
+],
+v5 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "cursor",
+  "args": null,
+  "storageKey": null
+},
+v6 = {
+  "kind": "LinkedField",
+  "alias": null,
+  "name": "pageInfo",
+  "storageKey": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "endCursor",
+      "args": null,
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "hasNextPage",
+      "args": null,
+      "storageKey": null
+    }
+  ]
 };
 return {
   "kind": "Request",
   "operationKind": "query",
   "name": "SkitList_Query",
   "id": null,
-  "text": "query SkitList_Query(\n  $skitid: ID!\n) {\n  node(id: $skitid) {\n    __typename\n    ...Skit_skit\n    id\n  }\n}\n\nfragment Skit_skit on Skit {\n  id\n  skitid\n  title\n  created\n  last_updated\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  description\n  messages {\n    edges {\n      node {\n        id\n        text\n        author\n        delay\n      }\n    }\n  }\n}\n",
+  "text": "query SkitList_Query(\n  $skitid: ID!\n) {\n  node(id: $skitid) {\n    __typename\n    ...Skit_skit\n    id\n  }\n}\n\nfragment Skit_skit on Skit {\n  id\n  skitid\n  title\n  created\n  last_updated\n  bots(first: 100) {\n    edges {\n      node {\n        id\n        botid\n        name\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  description\n  messages(first: 100) {\n    edges {\n      node {\n        id\n        messageid\n        text\n        author\n        delay\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
@@ -183,14 +230,7 @@ return {
                 "alias": null,
                 "name": "bots",
                 "storageKey": "bots(first:100)",
-                "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 100,
-                    "type": "Int"
-                  }
-                ],
+                "args": v4,
                 "concreteType": "BotConnection",
                 "plural": false,
                 "selections": [
@@ -230,54 +270,17 @@ return {
                           v2
                         ]
                       },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "cursor",
-                        "args": null,
-                        "storageKey": null
-                      }
+                      v5
                     ]
                   },
-                  {
-                    "kind": "LinkedField",
-                    "alias": null,
-                    "name": "pageInfo",
-                    "storageKey": null,
-                    "args": null,
-                    "concreteType": "PageInfo",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "endCursor",
-                        "args": null,
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "hasNextPage",
-                        "args": null,
-                        "storageKey": null
-                      }
-                    ]
-                  }
+                  v6
                 ]
               },
               {
                 "kind": "LinkedHandle",
                 "alias": null,
                 "name": "bots",
-                "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 100,
-                    "type": "Int"
-                  }
-                ],
+                "args": v4,
                 "handle": "connection",
                 "key": "Skit_bots",
                 "filters": null
@@ -293,8 +296,8 @@ return {
                 "kind": "LinkedField",
                 "alias": null,
                 "name": "messages",
-                "storageKey": null,
-                "args": null,
+                "storageKey": "messages(first:100)",
+                "args": v4,
                 "concreteType": "MessageConnection",
                 "plural": false,
                 "selections": [
@@ -320,6 +323,13 @@ return {
                           {
                             "kind": "ScalarField",
                             "alias": null,
+                            "name": "messageid",
+                            "args": null,
+                            "storageKey": null
+                          },
+                          {
+                            "kind": "ScalarField",
+                            "alias": null,
                             "name": "text",
                             "args": null,
                             "storageKey": null
@@ -337,12 +347,24 @@ return {
                             "name": "delay",
                             "args": null,
                             "storageKey": null
-                          }
+                          },
+                          v2
                         ]
-                      }
+                      },
+                      v5
                     ]
-                  }
+                  },
+                  v6
                 ]
+              },
+              {
+                "kind": "LinkedHandle",
+                "alias": null,
+                "name": "messages",
+                "args": v4,
+                "handle": "connection",
+                "key": "Skit_messages",
+                "filters": null
               }
             ]
           }

@@ -3,7 +3,8 @@ import {
   fromGlobalId,
   toGlobalId,
   connectionArgs,
-  connectionFromArray
+  connectionFromArray,
+  cursorForObjectInConnection
 } from 'graphql-relay';
 
 import {
@@ -11,14 +12,16 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLObjectType,
-  GraphQLList
+  GraphQLList,
+  GraphQLFloat
 } from 'graphql';
 
 import {
   SkitType,
   SkitEdge,
   BotType,
-  BotConnection
+  BotConnection,
+  MessageEdge
 } from '../../queries/types'
 
 import {
@@ -26,9 +29,11 @@ import {
   getSkit,
   updateSkitBots,
   getBots,
+  addMessageToSkit,
+  removeMessageFromSkit
 } from '../../db'
 
-let inputFields = {
+let updateSkitInputFields = {
   'skitid': { type: new GraphQLNonNull(GraphQLString) },
   'title': { type: new GraphQLNonNull(GraphQLString) },
   'description': { type: new GraphQLNonNull(GraphQLString) }
@@ -36,7 +41,7 @@ let inputFields = {
 
 export var UpdateSkitMutation = mutationWithClientMutationId({
   name: 'UpdateSkit',
-  inputFields: inputFields,
+  inputFields: updateSkitInputFields,
   outputFields: {
     skit: {
       type: SkitType,
@@ -53,13 +58,15 @@ export var UpdateSkitMutation = mutationWithClientMutationId({
   }
 })
 
+let removeBotInputFields = {
+  'skitid': { type: new GraphQLNonNull(GraphQLString) },
+  'bots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+  'victim': { type: new GraphQLNonNull(GraphQLString) }
+}
+
 export var RemoveBotMutation = mutationWithClientMutationId({
   name: 'RemoveBot',
-  inputFields: {
-    'skitid': { type: new GraphQLNonNull(GraphQLString) },
-    'bots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
-    'victim': { type: new GraphQLNonNull(GraphQLString) }
-  },
+  inputFields: removeBotInputFields,
   outputFields: {
     removedBotID: {
       type: new GraphQLNonNull(GraphQLID),
@@ -76,13 +83,15 @@ export var RemoveBotMutation = mutationWithClientMutationId({
   }
 })
 
+let addBotsInputFields = {
+  'skitid': { type: new GraphQLNonNull(GraphQLString) },
+  'botids': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+  'newBots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) }
+}
+
 export var AddBotsMutation = mutationWithClientMutationId({
   name: 'AddBots',
-  inputFields: {
-    'skitid': { type: new GraphQLNonNull(GraphQLString) },
-    'botids': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
-    'newBots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) }
-  },
+  inputFields: addBotsInputFields,
   outputFields: {
     bots: {
       type: BotConnection,
@@ -95,6 +104,65 @@ export var AddBotsMutation = mutationWithClientMutationId({
     return Promise.all([updatePromise, botsPromise]).then(results => {
       return {
         bots: results[1]
+      }
+    })
+  }
+})
+
+let addMessageInputFields = {
+  'skitid': { type: new GraphQLNonNull(GraphQLString) },
+  'text': { type: new GraphQLNonNull(GraphQLString) },
+  'author': { type: new GraphQLNonNull(GraphQLString) },
+  'delay': { type: new GraphQLNonNull(GraphQLFloat) }
+}
+
+export var AddMessageMutation = mutationWithClientMutationId({
+  name: 'AddMessage',
+  inputFields: addMessageInputFields,
+  outputFields: {
+    newMessageEdge: {
+      type: MessageEdge,
+      resolve: ({messageid, skitid}) => {
+        return getSkit(skitid)
+          .then(skit => {
+            let node = skit.messages.find(message => message.messageid == messageid)
+            console.log(node)
+            return {
+              node,
+              cursor: cursorForObjectInConnection(skit.messages, node),
+            }
+          })
+      }
+    }
+  },
+  mutateAndGetPayload: ({skitid, text, author, delay}) => {
+    return addMessageToSkit(skitid, {text, author, delay}).then(messageid => {
+      return {
+        messageid,
+        skitid
+      }
+    })
+  }
+})
+
+let removeMessageInputFields = {
+  'skitid': { type: new GraphQLNonNull(GraphQLString) },
+  'messageid': { type: new GraphQLNonNull(GraphQLString) }
+}
+
+export var RemoveMessageMutation = mutationWithClientMutationId({
+  name: 'RemoveMessage',
+  inputFields: removeMessageInputFields,
+  outputFields: {
+    removedMessageID: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: ({messageid}) => toGlobalId('Message', messageid)
+    }
+  },
+  mutateAndGetPayload: ({skitid, messageid}) => {
+    return removeMessageFromSkit(skitid, messageid).then(_ => {
+      return {
+        messageid
       }
     })
   }

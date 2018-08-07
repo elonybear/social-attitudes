@@ -67,12 +67,18 @@ class SkitList extends React.Component {
     edges.sort((edgeA, edgeB) => new Date(edgeB.node.last_updated) - new Date(edgeA.node.last_updated));
 
     return edges.map(edge => {
+      // console.log(edge)
       let botNodes = edge.node.SkitList_bots.edges.map(bot => bot.node)
+      let botNames = botNodes.map(bot => {
+        return (
+          <div key={bot.id}>{bot.name}</div>
+        )
+      })
       return (
         <div key={edge.node.id} className="skit-list-item clickable" onClick={this.handleItemClick.bind(this, edge.node)}>
           <div className="col-md-3"><span className="table-datum">{edge.node.title}</span></div>
-          <div className="col-md-2"><span className="table-datum">{edge.node.messages.edges.length}</span></div>
-          <div className="col-md-3">{botNodes.map(bot => <div key={bot.id}>{bot.name}</div>)}</div>
+          <div className="col-md-2"><span className="table-datum">{edge.node.SkitList_messages.edges.length}</span></div>
+          <div className="col-md-3">{botNames}</div>
           <div className="col-md-2"><div className="">{this.formatDate(edge.node.created)}</div></div>
           <div className="col-md-2"><span className="table-datum">{this.formatDate(edge.node.last_updated)}</span></div>
         </div>
@@ -176,7 +182,7 @@ export default createFragmentContainer(SkitList, {
                 }
               }
             },
-            messages {
+            SkitList_messages: messages(first:$rows) @connection(key: "Skit_SkitList_messages") {
               edges {
                 node {
                   id,

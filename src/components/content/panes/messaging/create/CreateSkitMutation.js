@@ -23,7 +23,7 @@ const mutation = graphql`
               }
             }
           },
-          messages {
+          SkitList_messages: messages(first:100) @connection(key: "Skit_SkitList_messages") {
             edges {
               node {
                 id,
