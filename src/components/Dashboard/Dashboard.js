@@ -2,8 +2,8 @@ import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
 import Async from '../Common/Async';
 
-const Tile = () => <Async load={import(/* webpackChunkName: "Tile" */ './Tile')} />
-
+// const Tile = () => <Async load={import(/* webpackChunkName: "Tile" */ './Tile')} />
+import Tile from './Tile';
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
