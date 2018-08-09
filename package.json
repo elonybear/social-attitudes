@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node ./server/index.js",
     "start-server": "nodemon --watch ./server --exec babel-node ./server/index.js",
     "build": "webpack --mode production --config webpack.prod.config.js --env.NODE_ENV=production --progress",
     "start-client": "NODE_ENV=development webpack-dev-server --mode development --port 3000",
