@@ -1,12 +1,18 @@
 import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 
-const Header = () => <Async load={import(/* webpackChunkName: "Header" */ './Header')} />
-const Dashboard = () => <Async load={import(/* webpackChunkName: "Dashboard" */ './../Dashboard/Dashboard')} />
-const UserList = () => <Async load={import(/* webpackChunkName: "UserList" */ '../Users/UserList')} />
-const NavigationMenu = () => <Async load={import(/* webpackChunkName: "NavigationMenu" */ '../Navigation/NavigationMenu')} />
-const Pane = () => <Async load={import(/* webpackChunkName: "Pane" */ '../Common/Pane')} />
-const SkitList = () => <Async load={import(/* webpackChunkName: "SkitList" */ '../Skits/SkitList')} />
+// const Header = () => <Async load={import(/* webpackChunkName: "Header" */ './Header')} />
+// const Dashboard = () => <Async load={import(/* webpackChunkName: "Dashboard" */ './../Dashboard/Dashboard')} />
+// const UserList = () => <Async load={import(/* webpackChunkName: "UserList" */ '../Users/UserList')} />
+// const NavigationMenu = () => <Async load={import(/* webpackChunkName: "NavigationMenu" */ '../Navigation/NavigationMenu')} />
+// const Pane = () => <Async load={import(/* webpackChunkName: "Pane" */ '../Common/Pane')} />
+// const SkitList = () => <Async load={import(/* webpackChunkName: "SkitList" */ '../Skits/SkitList')} />
+import Header from './Header'
+import Dashboard from '../Dashboard/Dashboard'
+import UserList from '../Users/UserList'
+import NavigationMenu from '../Navigation/NavigationMenu'
+import Pane from '../Common/Pane'
+import SkitList from '../Skits/SkitList'
 import Async from '../Common/Async';
 
 import { QueryRenderer } from 'react-relay';
