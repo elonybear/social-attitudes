@@ -1,9 +1,12 @@
 import { GraphQLObjectType } from 'graphql';
 
-import {CreateSkitMutation} from './mutations/skits/create';
-import {UpdateSkitMutation, RemoveBotMutation, AddBotsMutation} from './mutations/skits/update';
-import {CreateBotMutation} from './mutations/bots/create';
-import {CreateAndAddBotMutation} from './mutations/bots/createAndAdd';
+import {CreateSkitMutation} from './mutations/skit/create';
+import {UpdateSkitMutation} from './mutations/skit/update';
+import {CreateMessageMutation} from './mutations/message/create';
+import {DeleteMessageMutation} from './mutations/message/delete'
+import {CreateUserMutation} from './mutations/user/create';
+import {AddUsersMutation} from './mutations/skit_user/create';
+import {RemoveUserMutation} from './mutations/skit_user/delete';
 
 import {
   nodeDefinitions,
@@ -15,9 +18,10 @@ export default new GraphQLObjectType({
   fields: {
     createSkit: CreateSkitMutation,
     updateSkit: UpdateSkitMutation,
-    addBots: AddBotsMutation,
-    removeBot: RemoveBotMutation,
-    createBot: CreateBotMutation,
-    createAndAddBot: CreateAndAddBotMutation
+    createMessage: CreateMessageMutation,
+    deleteMessage: DeleteMessageMutation,
+    createUser: CreateUserMutation,
+    addUsers: AddUsersMutation,
+    removeUser: RemoveUserMutation
   }
 });

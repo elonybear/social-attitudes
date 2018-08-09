@@ -18,10 +18,8 @@ import {
 } from '../../queries/types'
 
 import {
-  createBot,
-  getBot,
-  getBots
-} from '../../db'
+  Bot
+} from '../../../db'
 
 let inputFields = {
   'name': { type: new GraphQLNonNull(GraphQLString) }
@@ -33,9 +31,9 @@ export var CreateBotMutation = mutationWithClientMutationId({
   outputFields: {
     newBotEdge: {
       type: BotEdge,
-      resolve: ({botid}) => {
-        let botPromise = getBot(botid);
-        let botsPromise = getBots();
+      resolve: ({bot_id}) => {
+        let botPromise = Bot.getBot(bot_id);
+        let botsPromise = Bot.getBots();
         return Promise.all([botPromise, botsPromise])
           .then(results => {
             let bot = results[0];
@@ -49,10 +47,10 @@ export var CreateBotMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({name}) => {
-    return createBot(name).then(id => {
+    return Bot.createBot(name).then(id => {
       console.log('Created: ' + id)
       return {
-        botid: id
+        bot_id: id
       }
     })
   }

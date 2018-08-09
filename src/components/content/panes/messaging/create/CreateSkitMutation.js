@@ -15,15 +15,16 @@ const mutation = graphql`
           id,
           title,
           created,
+          description,
           last_updated,
-          SkitList_bots: bots(first: 100) @connection(key: "Skit_SkitList_bots") {
+          SkitList_users: users(first: 100) @connection(key: "Skit_SkitList_users") {
             edges {
               node {
-                botid
+                user_id
               }
             }
           },
-          messages {
+          SkitList_messages: messages(first:100) @connection(key: "Skit_SkitList_messages") {
             edges {
               node {
                 id,
@@ -40,7 +41,7 @@ const mutation = graphql`
 
 export function createSkit(source, parentID, callback) {
   const variables = {
-    input: source,
+    input: source
   };
 
   const configs = [{

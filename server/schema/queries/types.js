@@ -5,7 +5,9 @@ import {
   GraphQLID,
   GraphQLList,
   GraphQLInt,
-  GraphQLFloat
+  GraphQLFloat,
+  GraphQLEnumType,
+  GraphQLBoolean
 } from 'graphql';
 
 import {
@@ -18,7 +20,7 @@ import {
   fromGlobalId
 } from 'graphql-relay';
 
-import {User, UserList, Skit, getSkit} from '../db';
+import {Skit, User} from '../../db';
 
 export var {nodeInterface, nodeField} = nodeDefinitions(
   globalId => {
@@ -27,18 +29,18 @@ export var {nodeInterface, nodeField} = nodeDefinitions(
     console.log("NodeDefinitions (globalId), type:", type);
     switch(type) {
       case 'Skit':
-        return getSkit(id);
+        return Skit.getSkit(id);
       default:
         return null;
     }
   },
   obj => {
     console.log("NodeDefinitions (obj), obj:", obj);
-    if (obj instanceof User) {
+    if (obj instanceof User.User) {
       return UserType;
-    } else if (obj instanceof UserList) {
+    } else if (obj instanceof User.UserList) {
       return UserListType;
-    } else if (obj instanceof Skit) {
+    } else if (obj instanceof Skit.Skit) {
       return SkitType;
     } else {
       return null;
@@ -51,22 +53,25 @@ export const UserType = new GraphQLObjectType({
   fields: {
     id: {
       type: GraphQLNonNull(GraphQLID),
-      resolve:(root) => toGlobalId('User', root.userid)
+      resolve:(root) => toGlobalId('User', root.user_id)
     },
-    userid: {
-      type: GraphQLString
+    user_id: {
+      type: GraphQLInt
     },
     first_name: {
       type: GraphQLString
     },
     last_name: {
       type: GraphQLString
+    },
+    bot: {
+      type: GraphQLBoolean
     }
   },
   interfaces: [nodeInterface],
 });
 
-export var {connectionType: UserConnection} =
+export var {connectionType: UserConnection, edgeType: UserEdge} =
   connectionDefinitions({name: 'User', nodeType: UserType});
 
 export const UserListType = new GraphQLObjectType({
@@ -79,18 +84,26 @@ export const UserListType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (root, args, context, info) => {
         console.log('getting users')
-        return connectionFromArray(root.rows.map(user => new User(user)), args)
+        return connectionFromArray(root, args)
       }
     },
     count: {
       type: GraphQLInt,
       resolve: (root, args, context, info) => {
         console.log('getting user count')
-        return root.rows.length;
+        return root.length;
       }
     }
   },
   interfaces: [nodeInterface],
+});
+
+var MessageType = new GraphQLEnumType({
+  name: 'MessageType',
+  values: {
+    RECEIVE: { value: 'RECEIVE' },
+    SEND: { value: 'SEND' }
+  }
 });
 
 const MessageType = new GraphQLObjectType({
@@ -99,62 +112,33 @@ const MessageType = new GraphQLObjectType({
     id: {
       type: GraphQLNonNull(GraphQLID),
       resolve: (root) => {
-        return toGlobalId('Message', root.messageid)
+        return toGlobalId('Message', root.message_id)
       }
     },
-    messageid: {
-      type: GraphQLNonNull(GraphQLString)
+    message_id: {
+      type: GraphQLNonNull(GraphQLInt)
     },
     text: {
       type: GraphQLNonNull(GraphQLString)
     },
-    author: {
-      type: GraphQLNonNull(GraphQLString)
+    user_id: {
+      type: GraphQLNonNull(GraphQLInt)
     },
     delay: {
       type: GraphQLNonNull(GraphQLFloat)
+    },
+    type: {
+      type: GraphQLNonNull(MessageType)
+    },
+    position: {
+      type: GraphQLNonNull(GraphQLInt)
     }
   },
   interfaces: [nodeInterface],
 })
 
-export var {connectionType: MessageConnection} =
+export var {connectionType: MessageConnection, edgeType: MessageEdge} =
   connectionDefinitions({name: 'Message', nodeType: MessageType});
-
-  export const BotType = new GraphQLObjectType({
-    name: 'Bot',
-    fields: {
-      id: {
-        type: GraphQLNonNull(GraphQLID),
-        resolve: (root) => {
-          return toGlobalId('Bot', root.botid)
-        }
-      },
-      botid: {
-        type: GraphQLNonNull(GraphQLString)
-      },
-      name: {
-        type: GraphQLNonNull(GraphQLString)
-      }
-    },
-    interfaces: [nodeInterface],
-  });
-
-  export var {connectionType: BotConnection, edgeType: BotEdge} =
-    connectionDefinitions({name: 'Bot', nodeType: BotType})
-
-  export const BotListType = new GraphQLObjectType({
-    name: 'BotList',
-    fields: {
-      id: globalIdField('BotList'),
-      bots: {
-        type: BotConnection,
-        args: connectionArgs,
-        resolve: (root, args) => connectionFromArray(root, args)
-      }
-    },
-    interfaces: [nodeInterface],
-  })
 
 export const SkitType = new GraphQLObjectType({
   name: 'Skit',
@@ -162,11 +146,11 @@ export const SkitType = new GraphQLObjectType({
     id: {
       type: GraphQLNonNull(GraphQLID),
       resolve: (root) => {
-        return toGlobalId('Skit', root.skitid)
+        return toGlobalId('Skit', root.skit_id)
       }
     },
-    skitid: {
-      type: GraphQLNonNull(GraphQLString)
+    skit_id: {
+      type: GraphQLNonNull(GraphQLInt)
     },
     title: {
       type: GraphQLNonNull(GraphQLString)
@@ -187,11 +171,11 @@ export const SkitType = new GraphQLObjectType({
     last_updated: {
       type: GraphQLString
     },
-    bots: {
-      type: BotConnection,
+    users: {
+      type: UserConnection,
       args: connectionArgs,
       resolve: (root, args) => {
-        return connectionFromArray(root.bots == null ? [] : root.bots, args)
+        return connectionFromArray(root.users == null ? [] : root.users, args)
       }
     }
   },

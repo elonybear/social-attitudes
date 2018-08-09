@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 48b265330c39db3d1c53790950384a98
+ * @relayHash 8c8144998408849eaddfc4dd11d3356d
  */
 
 /* eslint-disable */
@@ -9,23 +9,24 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type AddBotsInput = {
-  skitid: string,
-  botids: $ReadOnlyArray<?string>,
-  newBots: $ReadOnlyArray<?string>,
+export type AddUsersInput = {
+  skit_id: number,
+  user_ids: $ReadOnlyArray<?number>,
+  botOnly: boolean,
   clientMutationId?: ?string,
 };
-export type AddBotsMutationVariables = {|
-  input: AddBotsInput
+export type AddUsersMutationVariables = {|
+  input: AddUsersInput
 |};
-export type AddBotsMutationResponse = {|
-  +addBots: ?{|
-    +bots: ?{|
+export type AddUsersMutationResponse = {|
+  +addUsers: ?{|
+    +users: ?{|
       +edges: ?$ReadOnlyArray<?{|
         +node: ?{|
           +id: string,
-          +botid: string,
-          +name: string,
+          +user_id: ?number,
+          +first_name: ?string,
+          +last_name: ?string,
         |}
       |}>
     |}
@@ -35,16 +36,17 @@ export type AddBotsMutationResponse = {|
 
 
 /*
-mutation AddBotsMutation(
-  $input: AddBotsInput!
+mutation AddUsersMutation(
+  $input: AddUsersInput!
 ) {
-  addBots(input: $input) {
-    bots {
+  addUsers(input: $input) {
+    users {
       edges {
         node {
           id
-          botid
-          name
+          user_id
+          first_name
+          last_name
         }
       }
     }
@@ -57,7 +59,7 @@ var v0 = [
   {
     "kind": "LocalArgument",
     "name": "input",
-    "type": "AddBotsInput!",
+    "type": "AddUsersInput!",
     "defaultValue": null
   }
 ],
@@ -65,26 +67,26 @@ v1 = [
   {
     "kind": "LinkedField",
     "alias": null,
-    "name": "addBots",
+    "name": "addUsers",
     "storageKey": null,
     "args": [
       {
         "kind": "Variable",
         "name": "input",
         "variableName": "input",
-        "type": "AddBotsInput!"
+        "type": "AddUsersInput!"
       }
     ],
-    "concreteType": "AddBotsPayload",
+    "concreteType": "AddUsersPayload",
     "plural": false,
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "bots",
+        "name": "users",
         "storageKey": null,
         "args": null,
-        "concreteType": "BotConnection",
+        "concreteType": "UserConnection",
         "plural": false,
         "selections": [
           {
@@ -93,7 +95,7 @@ v1 = [
             "name": "edges",
             "storageKey": null,
             "args": null,
-            "concreteType": "BotEdge",
+            "concreteType": "UserEdge",
             "plural": true,
             "selections": [
               {
@@ -102,7 +104,7 @@ v1 = [
                 "name": "node",
                 "storageKey": null,
                 "args": null,
-                "concreteType": "Bot",
+                "concreteType": "User",
                 "plural": false,
                 "selections": [
                   {
@@ -115,14 +117,21 @@ v1 = [
                   {
                     "kind": "ScalarField",
                     "alias": null,
-                    "name": "botid",
+                    "name": "user_id",
                     "args": null,
                     "storageKey": null
                   },
                   {
                     "kind": "ScalarField",
                     "alias": null,
-                    "name": "name",
+                    "name": "first_name",
+                    "args": null,
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "name": "last_name",
                     "args": null,
                     "storageKey": null
                   }
@@ -138,13 +147,13 @@ v1 = [
 return {
   "kind": "Request",
   "operationKind": "mutation",
-  "name": "AddBotsMutation",
+  "name": "AddUsersMutation",
   "id": null,
-  "text": "mutation AddBotsMutation(\n  $input: AddBotsInput!\n) {\n  addBots(input: $input) {\n    bots {\n      edges {\n        node {\n          id\n          botid\n          name\n        }\n      }\n    }\n  }\n}\n",
+  "text": "mutation AddUsersMutation(\n  $input: AddUsersInput!\n) {\n  addUsers(input: $input) {\n    users {\n      edges {\n        node {\n          id\n          user_id\n          first_name\n          last_name\n        }\n      }\n    }\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
-    "name": "AddBotsMutation",
+    "name": "AddUsersMutation",
     "type": "SocialAttitudesRootMutation",
     "metadata": null,
     "argumentDefinitions": v0,
@@ -152,12 +161,12 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "AddBotsMutation",
+    "name": "AddUsersMutation",
     "argumentDefinitions": v0,
     "selections": v1
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'fef0d60ad3a4e91baeee5877cc50a60d';
+(node/*: any*/).hash = 'c60175cab9e3f06811f6a3bc5a50750c';
 module.exports = node;

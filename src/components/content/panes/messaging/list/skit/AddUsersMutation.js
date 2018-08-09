@@ -6,16 +6,17 @@ import environment from '../../../../../../environment.js'
 import {ConnectionHandler} from 'relay-runtime';
 
 const mutation = graphql`
-  mutation AddBotsMutation(
-    $input: AddBotsInput!
+  mutation AddUsersMutation(
+    $input: AddUsersInput!
   ) {
-    addBots(input: $input) {
-      bots {
+    addUsers(input: $input) {
+      users {
         edges {
           node {
             id,
-            botid,
-            name
+            user_id,
+            first_name,
+            last_name
           }
         }
       }
@@ -26,31 +27,31 @@ const mutation = graphql`
 function sharedUpdater(store, parentID, newNodes) {
   const parentProxy = store.get(parentID);
 
-  const skitBots = ConnectionHandler.getConnection(
+  const skitUsers = ConnectionHandler.getConnection(
     parentProxy,
-    'Skit_bots',
+    'Skit_users',
   );
 
-  const skitListBots = ConnectionHandler.getConnection(
+  const skitListUsers = ConnectionHandler.getConnection(
     parentProxy,
-    'Skit_SkitList_bots',
+    'Skit_SkitList_users',
   );
   for (let node of newNodes) {
       const newEdge = ConnectionHandler.createEdge(
         store,
         parentProxy,
         node,
-        'BotEdge'
+        'UserEdge'
       );
-      ConnectionHandler.insertEdgeAfter(skitBots, newEdge);
-      ConnectionHandler.insertEdgeAfter(skitListBots, newEdge);
+      ConnectionHandler.insertEdgeAfter(skitUsers, newEdge);
+      ConnectionHandler.insertEdgeAfter(skitListUsers, newEdge);
   }
 }
 
 
-export function addBots(source, parentID, callback) {
+export function addUsers(source, parentID, callback) {
   const variables = {
-    input: source,
+    input: {...source, botOnly: true},
   };
 
   commitMutation(
@@ -61,22 +62,22 @@ export function addBots(source, parentID, callback) {
       onCompleted: (response, errors) => {
         console.log('Response received from server.')
         console.log(response);
-        callback(response.addBots.bots.edges);
+        callback(response.addUsers.users.edges);
       },
       onError: err => console.error(err),
       updater: (store) => {
         // Get the payload returned from the server
-        const payload = store.getRootField('addBots');
+        const payload = store.getRootField('addUsers');
 
         // Get the edge of the newly created Todo record
-        const newBots =
+        const newUsers =
           payload
-            .getLinkedRecord('bots')
+            .getLinkedRecord('users')
             .getLinkedRecords('edges')
             .map(edge => edge.getLinkedRecord('node'));
 
         // Add it to the user's todo list
-        sharedUpdater(store, parentID, newBots);
+        sharedUpdater(store, parentID, newUsers);
       },
     },
   );

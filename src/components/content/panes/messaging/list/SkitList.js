@@ -25,7 +25,8 @@ class SkitList extends React.Component {
   }
 
   handleItemClick(skit) {
-    this.props.history.push(this.props.match.url + `/${skit.id}`)
+    console.log(skit)
+    this.props.history.push(this.props.match.url + `/${skit.skit_id}`)
   }
 
   militaryToStandard(time) {
@@ -56,7 +57,7 @@ class SkitList extends React.Component {
   formatDate(fullDate) {
     let d = new Date(fullDate);
     let time = this.militaryToStandard(`${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`)
-    let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
+    let date = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`
     return `${time} ${date}`
   }
 
@@ -67,12 +68,18 @@ class SkitList extends React.Component {
     edges.sort((edgeA, edgeB) => new Date(edgeB.node.last_updated) - new Date(edgeA.node.last_updated));
 
     return edges.map(edge => {
-      let botNodes = edge.node.SkitList_bots.edges.map(bot => bot.node)
+      // console.log(edge)
+      let userNodes = edge.node.SkitList_users.edges.map(user => user.node)
+      let botNames = userNodes.map(user => {
+        return (
+          <div key={user.id}>{user.first_name} {user.last_name}</div>
+        )
+      })
       return (
         <div key={edge.node.id} className="skit-list-item clickable" onClick={this.handleItemClick.bind(this, edge.node)}>
           <div className="col-md-3"><span className="table-datum">{edge.node.title}</span></div>
-          <div className="col-md-2"><span className="table-datum">{edge.node.messages.edges.length}</span></div>
-          <div className="col-md-3">{botNodes.map(bot => <div key={bot.id}>{bot.name}</div>)}</div>
+          <div className="col-md-2"><span className="table-datum">{edge.node.SkitList_messages.edges.length}</span></div>
+          <div className="col-md-3">{botNames}</div>
           <div className="col-md-2"><div className="">{this.formatDate(edge.node.created)}</div></div>
           <div className="col-md-2"><span className="table-datum">{this.formatDate(edge.node.last_updated)}</span></div>
         </div>
@@ -111,21 +118,21 @@ class SkitList extends React.Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-                query SkitList_Query($skitid: ID!) {
-                  node(id: $skitid) {
+                query SkitList_Query($skit_id: Int!) {
+                  skit(skit_id: $skit_id, botOnly: true) {
                     ...Skit_skit
                   }
                 }
               `}
         variables={{
-          skitid: routeProps.match.params.id,
+          skit_id: routeProps.match.params.id,
         }}
         render={({error, props}) => {
           if (error) {
             return <div>{error.message}</div>;
           } else if (props) {
             return (
-              <Skit {...routeProps} skit={props.node} bots={this.props.bots}/>
+              <Skit {...routeProps} skit={props.skit} users={this.props.users}/>
             )
           }
           return <div>Loading</div>;
@@ -164,19 +171,21 @@ export default createFragmentContainer(SkitList, {
         edges {
           node {
             id,
+            skit_id,
             title,
             created,
             last_updated,
-            SkitList_bots: bots(first: $rows) @connection(key: "Skit_SkitList_bots") {
+            SkitList_users: users(first: $rows) @connection(key: "Skit_SkitList_users") {
               edges {
                 node {
                   id,
-                  botid,
-                  name
+                  user_id,
+                  first_name,
+                  last_name
                 }
               }
             },
-            messages {
+            SkitList_messages: messages(first:$rows) @connection(key: "Skit_SkitList_messages") {
               edges {
                 node {
                   id,
@@ -188,21 +197,22 @@ export default createFragmentContainer(SkitList, {
       }
     }
   `,
-  bots: graphql`
-    fragment SkitList_bots on BotList @argumentDefinitions(
+  users: graphql`
+    fragment SkitList_users on UserList @argumentDefinitions(
         rows: {type: "Int", defaultValue: 100}
       ){
       id,
-      bots (first: $rows) @connection(key: "SkitList_bots", filters: []){
+      userList (first: $rows) @connection(key: "SkitList_userList", filters: []){
         edges {
           node {
             id,
-            botid,
-            name
+            user_id,
+            first_name,
+            last_name
           }
         }
       },
-      ...CreateSkitForm_bots
+      ...CreateSkitForm_users
     }
   `
 })

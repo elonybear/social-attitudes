@@ -76,8 +76,6 @@ export function getSkit(skitid) {
       skit.bots = [];
     }
 
-    console.log(skit.bots)
-
     return new Skit({
       ...skit,
       bots: skit.bots.map(botid => bots.find(bot => bot.botid == botid)),
@@ -117,6 +115,28 @@ export function getBot(botid) {
 export function updateSkitBots(skitid, bots) {
   let botsString = `[${bots.map(bot => `'${bot}'`).join(",")}]`
   return DB.execute(`UPDATE skits SET bots = ${botsString} where skitid = ? IF EXISTS`, [skitid]);
+}
+
+export function addMessageToSkit(skitid, message) {
+  return getSkit(skitid).then(skit => {
+    let messageid = uuid();
+    let messages = [...skit.messages, {...message, messageid}].map(JSON.stringify)
+    return updateSkitMessages(skitid, messages)
+      .then(_ => messageid)
+  })
+}
+
+export function removeMessageFromSkit(skitid, messageid) {
+  return getSkit(skitid).then(skit => {
+    let index = skit.messages.findIndex(message => message.messageid === messageid);
+    skit.messages.splice(index, 1);
+    let messages = skit.messages.map(JSON.stringify);
+    return updateSkitMessages(skitid, messages).then(_ => messageid);
+  })
+}
+
+export function updateSkitMessages(skitid, messages) {
+  return DB.execute(`UPDATE skits SET messages = ? WHERE skitid = ?`, [messages, skitid]);
 }
 
 export function createBot(name) {

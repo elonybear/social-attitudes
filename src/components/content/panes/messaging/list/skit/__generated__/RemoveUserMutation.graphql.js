@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ca2dd52d7c7e814b3080ad278eaa61f5
+ * @relayHash f02d37901354ded64bcfbde9071ef948
  */
 
 /* eslint-disable */
@@ -9,29 +9,28 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type RemoveBotInput = {
-  skitid: string,
-  bots: $ReadOnlyArray<?string>,
-  victim: string,
+export type RemoveUserInput = {
+  skit_id: number,
+  user_id: $ReadOnlyArray<?number>,
   clientMutationId?: ?string,
 };
-export type RemoveBotMutationVariables = {|
-  input: RemoveBotInput
+export type RemoveUserMutationVariables = {|
+  input: RemoveUserInput
 |};
-export type RemoveBotMutationResponse = {|
-  +removeBot: ?{|
-    +removedBotID: string
+export type RemoveUserMutationResponse = {|
+  +removeUser: ?{|
+    +removedUserID: ?string
   |}
 |};
 */
 
 
 /*
-mutation RemoveBotMutation(
-  $input: RemoveBotInput!
+mutation RemoveUserMutation(
+  $input: RemoveUserInput!
 ) {
-  removeBot(input: $input) {
-    removedBotID
+  removeUser(input: $input) {
+    removedUserID
   }
 }
 */
@@ -41,7 +40,7 @@ var v0 = [
   {
     "kind": "LocalArgument",
     "name": "input",
-    "type": "RemoveBotInput!",
+    "type": "RemoveUserInput!",
     "defaultValue": null
   }
 ],
@@ -49,23 +48,23 @@ v1 = [
   {
     "kind": "LinkedField",
     "alias": null,
-    "name": "removeBot",
+    "name": "removeUser",
     "storageKey": null,
     "args": [
       {
         "kind": "Variable",
         "name": "input",
         "variableName": "input",
-        "type": "RemoveBotInput!"
+        "type": "RemoveUserInput!"
       }
     ],
-    "concreteType": "RemoveBotPayload",
+    "concreteType": "RemoveUserPayload",
     "plural": false,
     "selections": [
       {
         "kind": "ScalarField",
         "alias": null,
-        "name": "removedBotID",
+        "name": "removedUserID",
         "args": null,
         "storageKey": null
       }
@@ -75,13 +74,13 @@ v1 = [
 return {
   "kind": "Request",
   "operationKind": "mutation",
-  "name": "RemoveBotMutation",
+  "name": "RemoveUserMutation",
   "id": null,
-  "text": "mutation RemoveBotMutation(\n  $input: RemoveBotInput!\n) {\n  removeBot(input: $input) {\n    removedBotID\n  }\n}\n",
+  "text": "mutation RemoveUserMutation(\n  $input: RemoveUserInput!\n) {\n  removeUser(input: $input) {\n    removedUserID\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
-    "name": "RemoveBotMutation",
+    "name": "RemoveUserMutation",
     "type": "SocialAttitudesRootMutation",
     "metadata": null,
     "argumentDefinitions": v0,
@@ -89,12 +88,12 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "RemoveBotMutation",
+    "name": "RemoveUserMutation",
     "argumentDefinitions": v0,
     "selections": v1
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'b8ff4477d4fc1d705e32c24fc562a4c2';
+(node/*: any*/).hash = '0db728f1d74957cc00fd3043dca46673';
 module.exports = node;

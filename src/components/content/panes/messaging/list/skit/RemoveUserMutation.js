@@ -6,16 +6,16 @@ import environment from '../../../../../../environment.js'
 import {ConnectionHandler} from 'relay-runtime';
 
 const mutation = graphql`
-  mutation RemoveBotMutation(
-    $input: RemoveBotInput!
+  mutation RemoveUserMutation(
+    $input: RemoveUserInput!
   ) {
-    removeBot(input: $input) {
-      removedBotID
+    removeUser(input: $input) {
+      removedUserID
   }
 }
 `
 
-export function removeBot(source, parentID, callback) {
+export function removeUser(source, parentID, callback) {
   const variables = {
     input: source,
   };
@@ -26,10 +26,10 @@ export function removeBot(source, parentID, callback) {
     type: 'RANGE_DELETE',
     parentID: parentID,
     connectionKeys: [{
-      key: 'Skit_bots',
-    }, { key: 'Skit_SkitList_bots'}],
-    pathToConnection: ['skit', 'bots'],
-    deletedIDFieldName: 'removedBotID'
+      key: 'Skit_users',
+    }, { key: 'Skit_SkitList_users'}],
+    pathToConnection: ['skit', 'users'],
+    deletedIDFieldName: 'removedUserID'
   }];
 
   commitMutation(
@@ -41,7 +41,7 @@ export function removeBot(source, parentID, callback) {
         console.log(errors)
         console.log('Response received from server.')
         console.log(response);
-        callback(response.removeBot.removedBotID);
+        callback(response.removeUser.removedUserID);
       },
       onError: err => console.error(err),
       configs

@@ -8,22 +8,23 @@
 
 /*::
 import type { ConcreteFragment } from 'relay-runtime';
-type CreateSkitForm_bots$ref = any;
+type CreateSkitForm_users$ref = any;
 import type { FragmentReference } from "relay-runtime";
-declare export opaque type SkitList_bots$ref: FragmentReference;
-export type SkitList_bots = {|
+declare export opaque type SkitList_users$ref: FragmentReference;
+export type SkitList_users = {|
   +id: string,
-  +bots: ?{|
+  +userList: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
-        +botid: string,
-        +name: string,
+        +user_id: ?number,
+        +first_name: ?string,
+        +last_name: ?string,
       |}
     |}>
   |},
-  +$fragmentRefs: CreateSkitForm_bots$ref,
-  +$refType: SkitList_bots$ref,
+  +$fragmentRefs: CreateSkitForm_users$ref,
+  +$refType: SkitList_users$ref,
 |};
 */
 
@@ -38,8 +39,8 @@ var v0 = {
 };
 return {
   "kind": "Fragment",
-  "name": "SkitList_bots",
-  "type": "BotList",
+  "name": "SkitList_users",
+  "type": "UserList",
   "metadata": {
     "connection": [
       {
@@ -47,7 +48,7 @@ return {
         "cursor": null,
         "direction": "forward",
         "path": [
-          "bots"
+          "userList"
         ]
       }
     ]
@@ -64,11 +65,11 @@ return {
     v0,
     {
       "kind": "LinkedField",
-      "alias": "bots",
-      "name": "__SkitList_bots_connection",
+      "alias": "userList",
+      "name": "__SkitList_userList_connection",
       "storageKey": null,
       "args": null,
-      "concreteType": "BotConnection",
+      "concreteType": "UserConnection",
       "plural": false,
       "selections": [
         {
@@ -77,7 +78,7 @@ return {
           "name": "edges",
           "storageKey": null,
           "args": null,
-          "concreteType": "BotEdge",
+          "concreteType": "UserEdge",
           "plural": true,
           "selections": [
             {
@@ -86,21 +87,28 @@ return {
               "name": "node",
               "storageKey": null,
               "args": null,
-              "concreteType": "Bot",
+              "concreteType": "User",
               "plural": false,
               "selections": [
                 v0,
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "name": "botid",
+                  "name": "user_id",
                   "args": null,
                   "storageKey": null
                 },
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "name": "name",
+                  "name": "first_name",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "last_name",
                   "args": null,
                   "storageKey": null
                 },
@@ -151,12 +159,12 @@ return {
     },
     {
       "kind": "FragmentSpread",
-      "name": "CreateSkitForm_bots",
+      "name": "CreateSkitForm_users",
       "args": null
     }
   ]
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '40896f2034be39f5e471ca63849943ca';
+(node/*: any*/).hash = '69dac414851540ac5289d8910bc5ca62';
 module.exports = node;

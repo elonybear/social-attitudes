@@ -1,9 +1,8 @@
-import CassandraClient from './db/cql.js';
-import MySQLClient from './db/mysql.js';
+import MySQLClient from './mysql.js';
 
 module.exports = {
   //DB settings
-  DB: CassandraClient,
+  DB: MySQLClient,
 
   //GraphQL settings
   GRAPHQL_PORT: 4000,

@@ -16,19 +16,21 @@ export type SkitList_skits = {|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
+        +skit_id: number,
         +title: string,
         +created: ?string,
         +last_updated: ?string,
-        +SkitList_bots: ?{|
+        +SkitList_users: ?{|
           +edges: ?$ReadOnlyArray<?{|
             +node: ?{|
               +id: string,
-              +botid: string,
-              +name: string,
+              +user_id: ?number,
+              +first_name: ?string,
+              +last_name: ?string,
             |}
           |}>
         |},
-        +messages: ?{|
+        +SkitList_messages: ?{|
           +edges: ?$ReadOnlyArray<?{|
             +node: ?{|
               +id: string
@@ -45,27 +47,33 @@ export type SkitList_skits = {|
 
 const node/*: ConcreteFragment*/ = (function(){
 var v0 = {
+  "count": "rows",
+  "cursor": null,
+  "direction": "forward",
+  "path": null
+},
+v1 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "id",
   "args": null,
   "storageKey": null
 },
-v1 = {
+v2 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "__typename",
   "args": null,
   "storageKey": null
 },
-v2 = {
+v3 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "cursor",
   "args": null,
   "storageKey": null
 },
-v3 = {
+v4 = {
   "kind": "LinkedField",
   "alias": null,
   "name": "pageInfo",
@@ -96,12 +104,8 @@ return {
   "type": "SkitList",
   "metadata": {
     "connection": [
-      {
-        "count": "rows",
-        "cursor": null,
-        "direction": "forward",
-        "path": null
-      },
+      v0,
+      v0,
       {
         "count": "rows",
         "cursor": null,
@@ -121,7 +125,7 @@ return {
     }
   ],
   "selections": [
-    v0,
+    v1,
     {
       "kind": "LinkedField",
       "alias": "skits",
@@ -149,7 +153,14 @@ return {
               "concreteType": "Skit",
               "plural": false,
               "selections": [
-                v0,
+                v1,
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "skit_id",
+                  "args": null,
+                  "storageKey": null
+                },
                 {
                   "kind": "ScalarField",
                   "alias": null,
@@ -173,11 +184,11 @@ return {
                 },
                 {
                   "kind": "LinkedField",
-                  "alias": "SkitList_bots",
-                  "name": "__Skit_SkitList_bots_connection",
+                  "alias": "SkitList_users",
+                  "name": "__Skit_SkitList_users_connection",
                   "storageKey": null,
                   "args": null,
-                  "concreteType": "BotConnection",
+                  "concreteType": "UserConnection",
                   "plural": false,
                   "selections": [
                     {
@@ -186,7 +197,7 @@ return {
                       "name": "edges",
                       "storageKey": null,
                       "args": null,
-                      "concreteType": "BotEdge",
+                      "concreteType": "UserEdge",
                       "plural": true,
                       "selections": [
                         {
@@ -195,37 +206,44 @@ return {
                           "name": "node",
                           "storageKey": null,
                           "args": null,
-                          "concreteType": "Bot",
+                          "concreteType": "User",
                           "plural": false,
                           "selections": [
-                            v0,
+                            v1,
                             {
                               "kind": "ScalarField",
                               "alias": null,
-                              "name": "botid",
+                              "name": "user_id",
                               "args": null,
                               "storageKey": null
                             },
                             {
                               "kind": "ScalarField",
                               "alias": null,
-                              "name": "name",
+                              "name": "first_name",
                               "args": null,
                               "storageKey": null
                             },
-                            v1
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "name": "last_name",
+                              "args": null,
+                              "storageKey": null
+                            },
+                            v2
                           ]
                         },
-                        v2
+                        v3
                       ]
                     },
-                    v3
+                    v4
                   ]
                 },
                 {
                   "kind": "LinkedField",
-                  "alias": null,
-                  "name": "messages",
+                  "alias": "SkitList_messages",
+                  "name": "__Skit_SkitList_messages_connection",
                   "storageKey": null,
                   "args": null,
                   "concreteType": "MessageConnection",
@@ -249,25 +267,28 @@ return {
                           "concreteType": "Message",
                           "plural": false,
                           "selections": [
-                            v0
+                            v1,
+                            v2
                           ]
-                        }
+                        },
+                        v3
                       ]
-                    }
+                    },
+                    v4
                   ]
                 },
-                v1
+                v2
               ]
             },
-            v2
+            v3
           ]
         },
-        v3
+        v4
       ]
     }
   ]
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '9af341600fff3f1d442adbb04a8880d4';
+(node/*: any*/).hash = '247f35407b9af18df667fdf7a09cabe0';
 module.exports = node;

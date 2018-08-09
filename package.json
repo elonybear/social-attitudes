@@ -49,6 +49,7 @@
     "relay-compiler": "^1.6.0",
     "relay-mock-network-layer": "^1.2.0",
     "relay-runtime": "^1.6.0",
+    "underscore": "^1.9.1",
     "uuid4": "^1.0.0"
   },
   "devDependencies": {
@@ -64,7 +65,7 @@
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "^7.8.2",
     "extract-text-webpack-plugin": "3.0.2",
@@ -80,6 +81,7 @@
     "rimraf": "2.6.2",
     "sass-loader": "^6.0.6",
     "sass-module-importer": "^1.2.1",
+    "standard": "^11.0.1",
     "style-loader": "^0.21.0",
     "url-loader": "1.0.0",
     "webpack": "^4.10.0",
