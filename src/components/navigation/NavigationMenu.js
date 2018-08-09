@@ -29,7 +29,8 @@ export default class NavigationMenu extends React.Component {
       }],
     }
 
-    this.state.active = this.state.tabs.findIndex(tab => this.props.location.pathname.indexOf(tab['route']) > -1)
+    console.log(this.props)
+    this.state.active = this.state.tabs.findIndex(tab => props.location.pathname.indexOf(tab['route']) > -1)
   }
 
   handleClick(route, active) {

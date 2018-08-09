@@ -21,7 +21,6 @@ export default class Base extends React.Component {
   }
 
   renderPane(Component, queryProps, routerProps) {
-    console.log(queryProps)
     return <Component {...queryProps} {...routerProps} />
   }
 

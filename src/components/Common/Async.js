@@ -1,13 +1,19 @@
 import React from 'react';
 
 export default class Async extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { module: null };
+  }
+
+
   componentWillMount() {
     this.props.load.then(Component => {
-      this.Component = Component
-      this.forceUpdate()
+      this.setState({ module: Component.default })
     })
   }
   render() {
-    return this.Component ? <this.Component.default /> : null
+    const { module: Component } = this.state;
+    return <div>{Component && <Component />}</div>
   }
 }

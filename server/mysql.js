@@ -3,7 +3,7 @@ var config = {
   host     : 'localhost',
   user     : 'root',
   password : 'root',
-  database : 'social_attitudes'
+  database: 'social_attitudes'
 };
 
 var connection = mysql.createConnection( config );

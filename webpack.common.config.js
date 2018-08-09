@@ -26,6 +26,7 @@ const miniCssPlugin = new MiniCssExtractPlugin({
 module.exports = {
   output: {
     publicPath: '/',
+    path: path.join(__dirname, 'server/dist'),
     chunkFilename: '[name].bundle.js'
   },
   module: {

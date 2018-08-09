@@ -7,7 +7,7 @@ const dev = {
   devtool: 'source-map',
   devServer: {
     port: 3000,
-    contentBase: path.join(__dirname, "dist"),
+    contentBase: path.join(__dirname, "server/dist"),
     proxy: {
       "/graphql": "http://localhost:4000"
     },
