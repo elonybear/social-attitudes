@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 91e16bdcdbda2caa64e9e4ad30e0e80f
+ * @relayHash cabbe0d613eee418fb141e48fcb35123
  */
 
 /* eslint-disable */
@@ -10,7 +10,7 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 export type UpdateSkitInput = {
-  skitid: string,
+  skit_id: number,
   title: string,
   description: string,
   clientMutationId?: ?string,

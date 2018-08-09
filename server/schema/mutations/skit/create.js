@@ -9,7 +9,8 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLObjectType,
-  GraphQLList
+  GraphQLList,
+  GraphQLInt
 } from 'graphql';
 
 import {
@@ -18,15 +19,13 @@ import {
 } from '../../queries/types'
 
 import {
-  createSkit,
-  getSkit,
-  getSkits
-} from '../../db'
+  Skit
+} from '../../../db'
 
 let inputFields = {
   'title': { type: new GraphQLNonNull(GraphQLString) },
   'description': { type: new GraphQLNonNull(GraphQLString) },
-  'bots': { type: new GraphQLNonNull(GraphQLList(GraphQLString)) }
+  'users': { type: new GraphQLNonNull(GraphQLList(GraphQLInt)) }
 }
 
 export var CreateSkitMutation = mutationWithClientMutationId({
@@ -35,9 +34,9 @@ export var CreateSkitMutation = mutationWithClientMutationId({
   outputFields: {
     newSkitEdge: {
       type: SkitEdge,
-      resolve: ({skitid}) => {
-        let skitPromise = getSkit(skitid);
-        let skitsPromise = getSkits();
+      resolve: ({skit_id}) => {
+        let skitPromise = Skit.getSkit(skit_id, true);
+        let skitsPromise = Skit.getSkits(true);
         return Promise.all([skitPromise, skitsPromise])
           .then(results => {
             let skit = results[0];
@@ -51,10 +50,10 @@ export var CreateSkitMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: (input) => {
-    return createSkit(input).then(id => {
+    return Skit.createSkit(input).then(id => {
       console.log('Created: ' + id)
       return {
-        skitid: id
+        skit_id: id
       }
     })
   }

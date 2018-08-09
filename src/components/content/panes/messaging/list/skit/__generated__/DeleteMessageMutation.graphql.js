@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 060a3e889b8fd38ef44f1695e89e5171
+ * @relayHash 0984a74b6a7315ba99ced771ff2fc2f8
  */
 
 /* eslint-disable */
@@ -9,28 +9,27 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type RemoveMessageInput = {
-  skitid: string,
-  messageid: string,
+export type DeleteMessageInput = {
+  message_id: number,
   clientMutationId?: ?string,
 };
-export type RemoveMessageMutationVariables = {|
-  input: RemoveMessageInput
+export type DeleteMessageMutationVariables = {|
+  input: DeleteMessageInput
 |};
-export type RemoveMessageMutationResponse = {|
-  +removeMessage: ?{|
-    +removedMessageID: string
+export type DeleteMessageMutationResponse = {|
+  +deleteMessage: ?{|
+    +deletedMessageID: string
   |}
 |};
 */
 
 
 /*
-mutation RemoveMessageMutation(
-  $input: RemoveMessageInput!
+mutation DeleteMessageMutation(
+  $input: DeleteMessageInput!
 ) {
-  removeMessage(input: $input) {
-    removedMessageID
+  deleteMessage(input: $input) {
+    deletedMessageID
   }
 }
 */
@@ -40,7 +39,7 @@ var v0 = [
   {
     "kind": "LocalArgument",
     "name": "input",
-    "type": "RemoveMessageInput!",
+    "type": "DeleteMessageInput!",
     "defaultValue": null
   }
 ],
@@ -48,23 +47,23 @@ v1 = [
   {
     "kind": "LinkedField",
     "alias": null,
-    "name": "removeMessage",
+    "name": "deleteMessage",
     "storageKey": null,
     "args": [
       {
         "kind": "Variable",
         "name": "input",
         "variableName": "input",
-        "type": "RemoveMessageInput!"
+        "type": "DeleteMessageInput!"
       }
     ],
-    "concreteType": "RemoveMessagePayload",
+    "concreteType": "DeleteMessagePayload",
     "plural": false,
     "selections": [
       {
         "kind": "ScalarField",
         "alias": null,
-        "name": "removedMessageID",
+        "name": "deletedMessageID",
         "args": null,
         "storageKey": null
       }
@@ -74,13 +73,13 @@ v1 = [
 return {
   "kind": "Request",
   "operationKind": "mutation",
-  "name": "RemoveMessageMutation",
+  "name": "DeleteMessageMutation",
   "id": null,
-  "text": "mutation RemoveMessageMutation(\n  $input: RemoveMessageInput!\n) {\n  removeMessage(input: $input) {\n    removedMessageID\n  }\n}\n",
+  "text": "mutation DeleteMessageMutation(\n  $input: DeleteMessageInput!\n) {\n  deleteMessage(input: $input) {\n    deletedMessageID\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
-    "name": "RemoveMessageMutation",
+    "name": "DeleteMessageMutation",
     "type": "SocialAttitudesRootMutation",
     "metadata": null,
     "argumentDefinitions": v0,
@@ -88,12 +87,12 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "RemoveMessageMutation",
+    "name": "DeleteMessageMutation",
     "argumentDefinitions": v0,
     "selections": v1
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '5611725492136cc6b96534f053254a55';
+(node/*: any*/).hash = 'b59e570102a08554db5f6d13f151c4a9';
 module.exports = node;

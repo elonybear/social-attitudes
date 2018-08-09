@@ -1,6 +1,6 @@
 import React from 'react';
 import {createFragmentContainer, graphql} from 'react-relay';
-import BotList from './skit/BotList'
+import UserList from './skit/UserList'
 import MessageList from './skit/MessageList'
 import environment from '../../../../../environment'
 import MessageWindow from './skit/MessageWindow'
@@ -10,11 +10,11 @@ import {updateSkit} from './skit/UpdateSkitMutation'
 import './css/skit.css';
 
 class Message {
-  constructor(type, author, text, delay) {
-    this.type = type;
-    this.author = author;
-    this.text = text;
-    this.delay = delay;
+  constructor(json) {
+    if (json == null) return;
+    for (let field in json) {
+      this[field] = json[field];
+    }
   }
 }
 
@@ -59,7 +59,7 @@ class Skit extends React.Component {
       updateSkit({
         title: this.state.title,
         description: this.state.description,
-        skitid: this.props.skit.skitid
+        skit_id: this.props.skit.skit_id
       }, (skit) => this.setState({[field]: false}))
     }
   }
@@ -87,18 +87,13 @@ class Skit extends React.Component {
     this.setState({[field]: event.target.value})
   }
 
-  getBotForMessage(botid) {
-    return this.props.bots.bots.edges.find(bot => bot.node.botid == botid).node;
+  getBotForMessage(bot_id) {
+    return this.props.bots.bots.edges.find(bot => bot.node.bot_id == bot_id).node;
   }
 
   processMessages() {
     return this.props.skit.messages.edges.map(message => {
-      return new Message(
-        'receive',
-        this.getBotForMessage(message.node.author).name,
-        message.node.text,
-        message.node.delay
-      )
+      return new Message(message)
     })
   }
 
@@ -175,16 +170,16 @@ class Skit extends React.Component {
               onClick={this.handlePreviewClick.bind(this)}><i className="fas fa-search m-r-5"></i> Preview</span>}
             {this.state.preview && <span
               className="rounded button button-danger pull-right outset button-large"
-              onClick={this.handlePreviewClick.bind(this)}><i class="fas fa-sign-out-alt m-r-5"></i> Exit</span>}
+              onClick={this.handlePreviewClick.bind(this)}><i className="fas fa-sign-out-alt m-r-5"></i> Exit</span>}
           </div>
         </div>
 
-        {this.state.preview && <MessageWindow messages={this.processMessages()}/>}
+        {this.state.preview && <MessageWindow messages={this.processMessages()} users={this.props.skit.users}/>}
         {!this.state.preview && <div className="row">
           <div className="col-md-12">
             <div className="row">
               <div className="skit-bots col-md-12">
-                <BotList {...this.props} />
+                <UserList {...this.props} />
               </div>
             </div>
             <div className="row">
@@ -205,16 +200,17 @@ export default createFragmentContainer(Skit, {
         rows: {type: "Int", defaultValue: 100}
       ){
       id,
-      skitid,
+      skit_id,
       title,
       created,
       last_updated,
-      bots(first:$rows) @connection(key: "Skit_bots"){
+      users(first:$rows) @connection(key: "Skit_users"){
         edges {
           node {
             id,
-            botid,
-            name
+            user_id,
+            first_name,
+            last_name
           }
         }
       },
@@ -223,10 +219,12 @@ export default createFragmentContainer(Skit, {
         edges {
           node {
             id,
-            messageid,
+            message_id,
             text,
-            author
-            delay
+            user_id
+            delay,
+            type,
+            position
           }
         }
       }

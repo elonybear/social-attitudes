@@ -22,6 +22,7 @@ export default class Base extends React.Component {
   }
 
   renderPane(Component, queryProps, routerProps) {
+    console.log(queryProps)
     return <Component {...queryProps} {...routerProps} />
   }
 
@@ -39,15 +40,15 @@ export default class Base extends React.Component {
                 environment={environment}
                 query={graphql`
                         query Base_Query {
-                          users {
+                          allUsers: users(botOnly:false) {
                             ...Dashboard_users,
                             ...UserList_users,
                           },
                           skits {
                             ...SkitList_skits
                           },
-                          bots {
-                            ...SkitList_bots
+                          users (botOnly:true) {
+                            ...SkitList_users
                           }
                         }
                       `}

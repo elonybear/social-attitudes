@@ -6,40 +6,30 @@ import environment from '../../../../../../environment.js'
 import {ConnectionHandler} from 'relay-runtime';
 
 const mutation = graphql`
-  mutation AddMessageMutation(
-    $input: AddMessageInput!
+  mutation DeleteMessageMutation(
+    $input: DeleteMessageInput!
   ) {
-    addMessage(input: $input) {
-      newMessageEdge {
-        node {
-          id,
-          messageid,
-          text,
-          author,
-          delay
-        }
-      }
+    deleteMessage(input: $input) {
+      deletedMessageID
   }
 }
 `
 
-
-export function addMessage(source, parentID, callback) {
+export function deleteMessage(source, parentID, callback) {
   const variables = {
     input: source,
   };
-  
+
+  console.log(variables)
+
   const configs = [{
-    type: 'RANGE_ADD',
+    type: 'RANGE_DELETE',
     parentID: parentID,
-    connectionInfo: [{
+    connectionKeys: [{
       key: 'Skit_messages',
-      rangeBehavior: 'append',
-    }, {
-      key: 'Skit_SkitList_messages',
-      rangeBehavior: 'append',
-    }],
-    edgeName: 'newMessageEdge',
+    }, { key: 'Skit_SkitList_messages'}],
+    pathToConnection: ['skit', 'messages'],
+    deletedIDFieldName: 'deletedMessageID'
   }];
 
   commitMutation(
@@ -48,9 +38,10 @@ export function addMessage(source, parentID, callback) {
       mutation,
       variables,
       onCompleted: (response, errors) => {
+        console.log(errors)
         console.log('Response received from server.')
         console.log(response);
-        callback(response.addMessage.newMessageEdge.node.id);
+        callback(response.deleteMessage.deletedMessageID);
       },
       onError: err => console.error(err),
       configs

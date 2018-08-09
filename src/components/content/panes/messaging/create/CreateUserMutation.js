@@ -6,15 +6,17 @@ import environment from '../../../../../environment.js'
 import {ConnectionHandler} from 'relay-runtime';
 
 const mutation = graphql`
-  mutation CreateBotMutation(
-    $input: CreateBotInput!
+  mutation CreateUserMutation(
+    $input: CreateUserInput!
   ) {
-    createBot(input: $input) {
-      newBotEdge {
+    createUser(input: $input) {
+      newUserEdge {
         node {
           id,
-          botid,
-          name
+          user_id,
+          first_name,
+          last_name,
+          bot
         }
       }
   }
@@ -22,22 +24,26 @@ const mutation = graphql`
 `
 
 
-export function createBot(source, parentID, callback) {
+export function createUser(source, parentID, callback) {
   const variables = {
-    input: source,
+    input: {
+      ...source,
+      botOnly: true,
+      bot: true
+    },
   };
 
   const configs = [{
     type: 'RANGE_ADD',
     parentID: parentID,
     connectionInfo: [{
-      key: 'CreateSkitForm_bots',
+      key: 'CreateSkitForm_userList',
       rangeBehavior: 'append',
     }, {
-      key: 'SkitList_bots',
+      key: 'SkitList_userList',
       rangeBehavior: 'append'
     }],
-    edgeName: 'newBotEdge',
+    edgeName: 'newUserEdge',
   }];
 
   commitMutation(
@@ -48,7 +54,7 @@ export function createBot(source, parentID, callback) {
       onCompleted: (response, errors) => {
         console.log('Response received from server.')
         console.log(response);
-        callback(response.createBot.newBotEdge.node.botid);
+        callback(response.createUser.newUserEdge.node.user_id);
       },
       onError: err => console.error(err),
       configs

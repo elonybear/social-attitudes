@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {addMessage} from './AddMessageMutation';
-import {removeMessage} from './RemoveMessageMutation'
+import {createMessage} from './CreateMessageMutation';
+import {deleteMessage} from './DeleteMessageMutation'
 
 export default class MessageList extends React.Component {
 
@@ -10,9 +10,9 @@ export default class MessageList extends React.Component {
     this.state = {
       message: "",
       showForm: false,
-      botSelected: "",
+      userSelected: -1,
       delay: "",
-      availableBotsSelected: []
+      availableUsersSelected: []
     }
   }
 
@@ -26,11 +26,13 @@ export default class MessageList extends React.Component {
   }
 
   handleCreateMessage() {
-    addMessage({
-      skitid: this.props.skit.skitid,
+    createMessage({
+      skit_id: this.props.skit.skit_id,
       text: this.state.message,
-      author:this.state.botSelected,
-      delay:parseFloat(this.state.delay)
+      user_id:this.state.userSelected,
+      delay:parseFloat(this.state.delay),
+      type: 'RECEIVE',
+      position: this.props.skit.messages.edges.length
     }, this.props.skit.id, () => this.handleCancelClick())
   }
 
@@ -39,15 +41,14 @@ export default class MessageList extends React.Component {
     setTimeout(() => this.messageFormToggle(), 330)
   }
 
-  handleRemoveMessage(messageid) {
-    removeMessage({
-      skitid: this.props.skit.skitid,
-      messageid: messageid
+  handleRemoveMessage(message_id) {
+    deleteMessage({
+      message_id: message_id
     }, this.props.skit.id, () => console.log("It worked???"))
   }
 
   messageFormToggle() {
-    this.setState({showForm: !this.state.showForm, message: "", botSelected: "", delay: ""});
+    this.setState({showForm: !this.state.showForm, message: "", userSelected: -1, delay: ""});
   }
 
   renderMessages() {
@@ -65,17 +66,16 @@ export default class MessageList extends React.Component {
       )
     }
 
-    console.log(skit.messages)
-
     return skit.messages.edges
       .map(message => {
+        let user = this.props.users.userList.edges.find(user => user.node.user_id === message.node.user_id).node
         return (
-          <div key={message.node.messageid} className="skit-list-item">
+          <div key={message.node.id} className="skit-list-item">
             <div className="col-md-5"><span className="table-datum">{message.node.text}</span></div>
-            <div className="col-md-3"><span className="table-datum">{this.props.bots.bots.edges.find(bot => bot.node.botid === message.node.author).node.name}</span></div>
+            <div className="col-md-3"><span className="table-datum">{user.first_name} {user.last_name}</span></div>
             <div className="col-md-2"><span className="table-datum">{message.node.delay}</span></div>
             <div className="col-md-1" style={{color: '#EB1E32'}}>
-              <span onClick={this.handleRemoveMessage.bind(this, message.node.messageid)}><i className="fas fa-minus-circle clickable" ></i></span>
+              <span onClick={this.handleRemoveMessage.bind(this, message.node.message_id)}><i className="fas fa-minus-circle clickable" ></i></span>
             </div>
             <div className="col-md-3"></div>
           </div>
@@ -83,25 +83,25 @@ export default class MessageList extends React.Component {
       })
   }
 
-  renderAvailableBots() {
-    let bots = [...this.props.skit.bots.edges]
-    bots.sort((edgeA, edgeB) => edgeB.node.name.toUpperCase() < edgeA.node.name.toUpperCase())
-    return bots
+  renderAvailableUsers() {
+    let users = [...this.props.skit.users.edges]
+    users.sort((edgeA, edgeB) => (`${edgeB.node.first_name} ${edgeB.node.last_name}`).toUpperCase() < (`${edgeA.node.first_name} ${edgeA.node.last_name}`).toUpperCase())
+    return users
       .map(edge => {
-          let classes = this.state.availableBotsSelected.indexOf(edge.node.botid) > -1 ? "selected" : "";
+          let classes = this.state.availableUsersSelected.indexOf(edge.node.user_id) > -1 ? "selected" : "";
           return (
-            <option key={edge.node.id} value={edge.node.botid}>
-              {edge.node.name}
+            <option key={edge.node.id} value={edge.node.user_id}>
+              {edge.node.first_name} {edge.node.last_name}
             </option>)
       })
   }
 
-  renderBotSelect() {
+  renderUserSelect() {
     return (
       <div className="form-group m-t-10">
-        <select selected={this.state.botSelected} className="form-control" onChange={this.handleInputChange.bind(this, 'botSelected')}>
-          <option value="">Select a bot</option>
-          {this.renderAvailableBots()}
+        <select value={this.state.userSelected} className="form-control" onChange={this.handleInputChange.bind(this, 'userSelected')}>
+          <option value="">Select a user</option>
+          {this.renderAvailableUsers()}
         </select>
       </div>
     )
@@ -115,7 +115,7 @@ export default class MessageList extends React.Component {
   renderAddButton() {
     return (
       <div className="">
-        <div key="add-bot" className="skit-list-item">
+        <div key="add-user" className="skit-list-item">
           <div className="col-md-5" onClick={this.handleAddMessage.bind(this)}>
             {!this.state.showForm && <span className="text-button text-success">
               <i className="fas fa-plus-circle m-r-5"></i>Add Message
@@ -144,7 +144,7 @@ export default class MessageList extends React.Component {
               </div>
             </div>
             <div className="col-md-3">
-              {this.renderBotSelect()}
+              {this.renderUserSelect()}
             </div>
             <div className="col-md-1">
               <input
@@ -174,7 +174,7 @@ export default class MessageList extends React.Component {
   }
 
   render() {
-
+    console.log(this.state);
     return (
       <div className="outset skit-table">
         <div className="table-header">

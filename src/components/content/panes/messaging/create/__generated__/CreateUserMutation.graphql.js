@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 4faf53434037cece10769b4f8ce5a8a8
+ * @relayHash 02025e09a3b306cf876e3b4acdb52954
  */
 
 /* eslint-disable */
@@ -9,25 +9,26 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type AddMessageInput = {
-  skitid: string,
-  text: string,
-  author: string,
-  delay: number,
+export type CreateUserInput = {
+  first_name: string,
+  last_name: string,
+  bot?: ?boolean,
+  botOnly?: ?boolean,
+  skit_id?: ?number,
   clientMutationId?: ?string,
 };
-export type AddMessageMutationVariables = {|
-  input: AddMessageInput
+export type CreateUserMutationVariables = {|
+  input: CreateUserInput
 |};
-export type AddMessageMutationResponse = {|
-  +addMessage: ?{|
-    +newMessageEdge: ?{|
+export type CreateUserMutationResponse = {|
+  +createUser: ?{|
+    +newUserEdge: ?{|
       +node: ?{|
         +id: string,
-        +messageid: string,
-        +text: string,
-        +author: string,
-        +delay: number,
+        +user_id: ?number,
+        +first_name: ?string,
+        +last_name: ?string,
+        +bot: ?boolean,
       |}
     |}
   |}
@@ -36,17 +37,17 @@ export type AddMessageMutationResponse = {|
 
 
 /*
-mutation AddMessageMutation(
-  $input: AddMessageInput!
+mutation CreateUserMutation(
+  $input: CreateUserInput!
 ) {
-  addMessage(input: $input) {
-    newMessageEdge {
+  createUser(input: $input) {
+    newUserEdge {
       node {
         id
-        messageid
-        text
-        author
-        delay
+        user_id
+        first_name
+        last_name
+        bot
       }
     }
   }
@@ -58,7 +59,7 @@ var v0 = [
   {
     "kind": "LocalArgument",
     "name": "input",
-    "type": "AddMessageInput!",
+    "type": "CreateUserInput!",
     "defaultValue": null
   }
 ],
@@ -66,26 +67,26 @@ v1 = [
   {
     "kind": "LinkedField",
     "alias": null,
-    "name": "addMessage",
+    "name": "createUser",
     "storageKey": null,
     "args": [
       {
         "kind": "Variable",
         "name": "input",
         "variableName": "input",
-        "type": "AddMessageInput!"
+        "type": "CreateUserInput!"
       }
     ],
-    "concreteType": "AddMessagePayload",
+    "concreteType": "CreateUserPayload",
     "plural": false,
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "newMessageEdge",
+        "name": "newUserEdge",
         "storageKey": null,
         "args": null,
-        "concreteType": "MessageEdge",
+        "concreteType": "UserEdge",
         "plural": false,
         "selections": [
           {
@@ -94,7 +95,7 @@ v1 = [
             "name": "node",
             "storageKey": null,
             "args": null,
-            "concreteType": "Message",
+            "concreteType": "User",
             "plural": false,
             "selections": [
               {
@@ -107,28 +108,28 @@ v1 = [
               {
                 "kind": "ScalarField",
                 "alias": null,
-                "name": "messageid",
+                "name": "user_id",
                 "args": null,
                 "storageKey": null
               },
               {
                 "kind": "ScalarField",
                 "alias": null,
-                "name": "text",
+                "name": "first_name",
                 "args": null,
                 "storageKey": null
               },
               {
                 "kind": "ScalarField",
                 "alias": null,
-                "name": "author",
+                "name": "last_name",
                 "args": null,
                 "storageKey": null
               },
               {
                 "kind": "ScalarField",
                 "alias": null,
-                "name": "delay",
+                "name": "bot",
                 "args": null,
                 "storageKey": null
               }
@@ -142,13 +143,13 @@ v1 = [
 return {
   "kind": "Request",
   "operationKind": "mutation",
-  "name": "AddMessageMutation",
+  "name": "CreateUserMutation",
   "id": null,
-  "text": "mutation AddMessageMutation(\n  $input: AddMessageInput!\n) {\n  addMessage(input: $input) {\n    newMessageEdge {\n      node {\n        id\n        messageid\n        text\n        author\n        delay\n      }\n    }\n  }\n}\n",
+  "text": "mutation CreateUserMutation(\n  $input: CreateUserInput!\n) {\n  createUser(input: $input) {\n    newUserEdge {\n      node {\n        id\n        user_id\n        first_name\n        last_name\n        bot\n      }\n    }\n  }\n}\n",
   "metadata": {},
   "fragment": {
     "kind": "Fragment",
-    "name": "AddMessageMutation",
+    "name": "CreateUserMutation",
     "type": "SocialAttitudesRootMutation",
     "metadata": null,
     "argumentDefinitions": v0,
@@ -156,12 +157,12 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "AddMessageMutation",
+    "name": "CreateUserMutation",
     "argumentDefinitions": v0,
     "selections": v1
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '42889f9e8b09aa47b625abe6757cbf58';
+(node/*: any*/).hash = '9fec435fed3aad22db21e4d5063a3788';
 module.exports = node;

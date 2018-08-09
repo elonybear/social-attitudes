@@ -8,20 +8,22 @@
 
 /*::
 import type { ConcreteFragment } from 'relay-runtime';
+export type MessageType = "RECEIVE" | "SEND" | "%future added value";
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type Skit_skit$ref: FragmentReference;
 export type Skit_skit = {|
   +id: string,
-  +skitid: string,
+  +skit_id: number,
   +title: string,
   +created: ?string,
   +last_updated: ?string,
-  +bots: ?{|
+  +users: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
-        +botid: string,
-        +name: string,
+        +user_id: ?number,
+        +first_name: ?string,
+        +last_name: ?string,
       |}
     |}>
   |},
@@ -30,10 +32,12 @@ export type Skit_skit = {|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
-        +messageid: string,
+        +message_id: number,
         +text: string,
-        +author: string,
+        +user_id: number,
         +delay: number,
+        +type: MessageType,
+        +position: number,
       |}
     |}>
   |},
@@ -53,18 +57,25 @@ var v0 = {
 v1 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "__typename",
+  "name": "user_id",
   "args": null,
   "storageKey": null
 },
 v2 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "cursor",
+  "name": "__typename",
   "args": null,
   "storageKey": null
 },
 v3 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "cursor",
+  "args": null,
+  "storageKey": null
+},
+v4 = {
   "kind": "LinkedField",
   "alias": null,
   "name": "pageInfo",
@@ -100,7 +111,7 @@ return {
         "cursor": null,
         "direction": "forward",
         "path": [
-          "bots"
+          "users"
         ]
       },
       {
@@ -126,7 +137,7 @@ return {
     {
       "kind": "ScalarField",
       "alias": null,
-      "name": "skitid",
+      "name": "skit_id",
       "args": null,
       "storageKey": null
     },
@@ -153,11 +164,11 @@ return {
     },
     {
       "kind": "LinkedField",
-      "alias": "bots",
-      "name": "__Skit_bots_connection",
+      "alias": "users",
+      "name": "__Skit_users_connection",
       "storageKey": null,
       "args": null,
-      "concreteType": "BotConnection",
+      "concreteType": "UserConnection",
       "plural": false,
       "selections": [
         {
@@ -166,7 +177,7 @@ return {
           "name": "edges",
           "storageKey": null,
           "args": null,
-          "concreteType": "BotEdge",
+          "concreteType": "UserEdge",
           "plural": true,
           "selections": [
             {
@@ -175,31 +186,32 @@ return {
               "name": "node",
               "storageKey": null,
               "args": null,
-              "concreteType": "Bot",
+              "concreteType": "User",
               "plural": false,
               "selections": [
                 v0,
+                v1,
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "name": "botid",
+                  "name": "first_name",
                   "args": null,
                   "storageKey": null
                 },
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "name": "name",
+                  "name": "last_name",
                   "args": null,
                   "storageKey": null
                 },
-                v1
+                v2
               ]
             },
-            v2
+            v3
           ]
         },
-        v3
+        v4
       ]
     },
     {
@@ -240,7 +252,7 @@ return {
                 {
                   "kind": "ScalarField",
                   "alias": null,
-                  "name": "messageid",
+                  "name": "message_id",
                   "args": null,
                   "storageKey": null
                 },
@@ -251,13 +263,7 @@ return {
                   "args": null,
                   "storageKey": null
                 },
-                {
-                  "kind": "ScalarField",
-                  "alias": null,
-                  "name": "author",
-                  "args": null,
-                  "storageKey": null
-                },
+                v1,
                 {
                   "kind": "ScalarField",
                   "alias": null,
@@ -265,18 +271,32 @@ return {
                   "args": null,
                   "storageKey": null
                 },
-                v1
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "type",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "position",
+                  "args": null,
+                  "storageKey": null
+                },
+                v2
               ]
             },
-            v2
+            v3
           ]
         },
-        v3
+        v4
       ]
     }
   ]
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '37c51cbd67356241691c2ad7f64ef199';
+(node/*: any*/).hash = '4bb6ab182b89321b7dcc7555cd3d6292';
 module.exports = node;

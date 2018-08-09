@@ -111,12 +111,18 @@ export default class MessageWindow extends React.Component {
     })
   }
 
+  renderParticipants() {
+    let botNames = this.props.users.userList.edges.map(edge => edge.node.first_name + " " + edge.node.last_name);
+
+    return botNames.slice(0, botNames.length - 1).join(", ") + " and " + botNames[botNames.length - 1];
+  }
+
   render() {
     return (
       <div className="msg-container pv4 ph4 br3 center bg-white shadow-6">
         <div id="msg-content" className="msg-content w-100 relative">
           <p className="conversation-start">
-            This is the start of your conversation with Jim and Tony.
+            This is the start of your conversation with {this.renderParticipants()}
             <br />
             07/03/18, 3:21 AM
           </p>

@@ -16,15 +16,17 @@ export type SkitList_skits = {|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
+        +skit_id: number,
         +title: string,
         +created: ?string,
         +last_updated: ?string,
-        +SkitList_bots: ?{|
+        +SkitList_users: ?{|
           +edges: ?$ReadOnlyArray<?{|
             +node: ?{|
               +id: string,
-              +botid: string,
-              +name: string,
+              +user_id: ?number,
+              +first_name: ?string,
+              +last_name: ?string,
             |}
           |}>
         |},
@@ -155,6 +157,13 @@ return {
                 {
                   "kind": "ScalarField",
                   "alias": null,
+                  "name": "skit_id",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
                   "name": "title",
                   "args": null,
                   "storageKey": null
@@ -175,11 +184,11 @@ return {
                 },
                 {
                   "kind": "LinkedField",
-                  "alias": "SkitList_bots",
-                  "name": "__Skit_SkitList_bots_connection",
+                  "alias": "SkitList_users",
+                  "name": "__Skit_SkitList_users_connection",
                   "storageKey": null,
                   "args": null,
-                  "concreteType": "BotConnection",
+                  "concreteType": "UserConnection",
                   "plural": false,
                   "selections": [
                     {
@@ -188,7 +197,7 @@ return {
                       "name": "edges",
                       "storageKey": null,
                       "args": null,
-                      "concreteType": "BotEdge",
+                      "concreteType": "UserEdge",
                       "plural": true,
                       "selections": [
                         {
@@ -197,21 +206,28 @@ return {
                           "name": "node",
                           "storageKey": null,
                           "args": null,
-                          "concreteType": "Bot",
+                          "concreteType": "User",
                           "plural": false,
                           "selections": [
                             v1,
                             {
                               "kind": "ScalarField",
                               "alias": null,
-                              "name": "botid",
+                              "name": "user_id",
                               "args": null,
                               "storageKey": null
                             },
                             {
                               "kind": "ScalarField",
                               "alias": null,
-                              "name": "name",
+                              "name": "first_name",
+                              "args": null,
+                              "storageKey": null
+                            },
+                            {
+                              "kind": "ScalarField",
+                              "alias": null,
+                              "name": "last_name",
                               "args": null,
                               "storageKey": null
                             },
@@ -274,5 +290,5 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'cf06f4311270004e3c4c77764273b445';
+(node/*: any*/).hash = '247f35407b9af18df667fdf7a09cabe0';
 module.exports = node;
