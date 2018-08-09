@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import Base from './components/Base';
+import Base from './components/App/Base';
 
 const Index = (props) => {
   return <Base {...props} />

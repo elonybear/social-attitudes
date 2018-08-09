@@ -10,7 +10,7 @@ export default class NavigationMenu extends React.Component {
     this.state = {
       tabs: [{
         'title': 'Dashboard',
-        'route': '/dashboard'
+        'route': '/'
       }, {
         'title': 'Recorded Conversations',
         'route': '/recorded'

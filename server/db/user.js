@@ -1,3 +1,5 @@
+import {getWhereForUserType} from './util';
+
 export class User {
   constructor(json) {
     if (json == null) return;
@@ -11,11 +13,8 @@ export class UserList {}
 
 import {DB} from '../config';
 
-export var getUsers = (user_ids, botOnly = false, skit_id) => {
-  let where = "WHERE bot = true OR bot = false"
-  if (botOnly) {
-    where = "WHERE bot = true";
-  }
+export var getUsers = (user_ids, type, skit_id) => {
+  let where = getWhereForUserType(type);
 
   let query = `SELECT * FROM users AS u `;
   let args = []

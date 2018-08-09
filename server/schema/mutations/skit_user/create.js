@@ -24,7 +24,8 @@ import {
   BotType,
   BotConnection,
   MessageEdge,
-  UserConnection
+  UserConnection,
+  UserCategoryType
 } from '../../queries/types'
 
 import {
@@ -36,7 +37,7 @@ import {
 let addUsersInputFields = {
   'skit_id': { type: new GraphQLNonNull(GraphQLInt) },
   'user_ids': { type: new GraphQLNonNull(GraphQLList(GraphQLInt)) },
-  'botOnly': { type: new GraphQLNonNull(GraphQLBoolean) }
+  'type': { type: new GraphQLNonNull(UserCategoryType), defaultValue: 'BOT' }
 }
 
 export var AddUsersMutation = mutationWithClientMutationId({
@@ -45,10 +46,9 @@ export var AddUsersMutation = mutationWithClientMutationId({
   outputFields: {
     users: {
       type: UserConnection,
-      resolve: ({user_ids, botOnly, skit_id}) =>
-        User.getUsers(user_ids, botOnly, skit_id)
+      resolve: ({user_ids, type, skit_id}) =>
+        User.getUsers(user_ids, type, skit_id)
           .then(users => {
-            console.log(users)
             return connectionFromArray(users, connectionArgs)
           })
     }

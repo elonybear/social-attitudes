@@ -1,40 +1,10 @@
 const webpack = require('webpack');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
 const path = require('path')
+var merge = require('webpack-merge');
+var baseConfig = require('./webpack.common.config');
 
-const htmlPlugin = new HtmlWebPackPlugin({
-  template: "./src/index.html",
-  filename: "./index.html",
-  inject: true
-});
-
-const jQueryPlugin = new webpack.ProvidePlugin({
-  $: 'jquery',
-  JQuery: 'jquery',
-  "window.JQuery": 'jquery'
-});
-
-module.exports = {
+const dev = {
   devtool: 'source-map',
-  output: {
-    publicPath: '/'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
-  },
-  plugins: [htmlPlugin, jQueryPlugin],
   devServer: {
     port: 3000,
     contentBase: path.join(__dirname, "dist"),
@@ -44,3 +14,14 @@ module.exports = {
     historyApiFallback: true
   }
 };
+
+const developmentConfiguration = function (env) {
+  const NODE_ENV = env.NODE_ENV ? env.NODE_ENV : 'development';
+  return {
+    plugins: [
+      new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(NODE_ENV) }),
+    ]
+  };
+}
+
+module.exports = merge.smart(baseConfig, dev, developmentConfiguration)

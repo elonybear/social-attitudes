@@ -2,7 +2,8 @@ import {
   UserListType,
   UserType,
   SkitListType,
-  SkitType
+  SkitType,
+  UserCategoryType
 } from './types';
 
 import {
@@ -26,16 +27,16 @@ export var UserListQuery = {
     user_ids: {
       type: GraphQLList(GraphQLInt)
     },
-    botOnly: {
-      type: GraphQLBoolean,
-      defaultValue: false
+    type: {
+      type: UserCategoryType,
+      defaultValue: 'ALL'
     },
     skit_id: {
       type: GraphQLInt
     }
   },
-  resolve: (root, {user_ids, botOnly, skit_id}, context, info) => {
-    return User.getUsers(user_ids, botOnly, skit_id);
+  resolve: (root, {user_ids, type, skit_id}, context, info) => {
+    return User.getUsers(user_ids, type, skit_id);
   }
 }
 
@@ -58,25 +59,25 @@ export var SkitQuery = {
     skit_id: {
       type: new GraphQLNonNull(GraphQLInt)
     },
-    botOnly: {
-      type: GraphQLBoolean,
-      defaultValue: false
+    type: {
+      type: UserCategoryType,
+      defaultValue: 'ALL'
     }
   },
-  resolve: (_, {skit_id, botOnly}) => {
-    return Skit.getSkit(skit_id, botOnly)
+  resolve: (_, {skit_id, type}) => {
+    return Skit.getSkit(skit_id, type)
   }
 }
 
 export var SkitListQuery = {
   type: SkitListType,
   args: {
-    botOnly: {
-      type: GraphQLBoolean,
-      defaultValue: false
+    type: {
+      type: UserCategoryType,
+      defaultValue: 'ALL'
     }
   },
-  resolve: (_, {botOnly}) => {
-    return Skit.getSkits(botOnly)
+  resolve: (_, {type}) => {
+    return Skit.getSkits(type)
   }
 }

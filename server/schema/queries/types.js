@@ -48,6 +48,15 @@ export var {nodeInterface, nodeField} = nodeDefinitions(
   }
 );
 
+export const UserCategoryType = new GraphQLEnumType({
+  name: 'UserCategory',
+  values: {
+    BOT: { value: 'BOT' },
+    USER: { value: 'USER' },
+    ALL: { value: 'ALL' }
+  }
+})
+
 export const UserType = new GraphQLObjectType({
   name: 'User',
   fields: {

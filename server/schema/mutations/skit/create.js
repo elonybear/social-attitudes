@@ -35,8 +35,8 @@ export var CreateSkitMutation = mutationWithClientMutationId({
     newSkitEdge: {
       type: SkitEdge,
       resolve: ({skit_id}) => {
-        let skitPromise = Skit.getSkit(skit_id, true);
-        let skitsPromise = Skit.getSkits(true);
+        let skitPromise = Skit.getSkit(skit_id, 'BOT');
+        let skitsPromise = Skit.getSkits('BOT');
         return Promise.all([skitPromise, skitsPromise])
           .then(results => {
             let skit = results[0];

@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import {DB} from '../config';
+import {getWhereForUserType} from './util';
 
 export class Skit {
   constructor(json) {
@@ -10,7 +11,8 @@ export class Skit {
   }
 }
 
-export var getSkits = (botOnly = false) => {
+export var getSkits = (type) => {
+  console.log(type)
   let skitsPromise =
     DB.execute(
       `SELECT
@@ -19,10 +21,7 @@ export var getSkits = (botOnly = false) => {
         skits AS s
       `);
 
-  let where = "WHERE bot = true OR bot = false"
-  if (botOnly) {
-    where = "WHERE bot = true";
-  }
+  let where = getWhereForUserType(type);
 
   let usersPromise =
     DB.execute(
@@ -67,7 +66,7 @@ export var getSkits = (botOnly = false) => {
   })
 }
 
-export var getSkit = (skit_id, botOnly = false) => {
+export var getSkit = (skit_id, type) => {
   let skitPromise =
     DB.execute(
       `SELECT
@@ -78,10 +77,7 @@ export var getSkit = (skit_id, botOnly = false) => {
         skit_id = ?
       `, skit_id);
 
-  let where = "WHERE bot = true OR bot = false"
-  if (botOnly) {
-    where = "WHERE bot = true";
-  }
+  let where = getWhereForUserType(type)
 
   where += " AND skit_id = ?"
 

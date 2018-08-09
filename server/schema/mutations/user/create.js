@@ -16,7 +16,8 @@ import {
 
 import {
   UserType,
-  UserEdge
+  UserEdge,
+  UserCategoryType
 } from '../../queries/types'
 
 import {
@@ -30,9 +31,9 @@ let inputFields = {
     type: GraphQLBoolean,
     defaultValue: false
   },
-  'botOnly': {
-    type: GraphQLBoolean,
-    defaultValue: false
+  'type': {
+    type: UserCategoryType,
+    defaultValue: 'BOT'
   },
   'skit_id': {
     type: GraphQLInt
@@ -45,9 +46,9 @@ export var CreateUserMutation = mutationWithClientMutationId({
   outputFields: {
     newUserEdge: {
       type: UserEdge,
-      resolve: ({user_id, botOnly, skit_id}) => {
+      resolve: ({user_id, type, skit_id}) => {
         let userPromise = User.getUser(user_id);
-        let usersPromise = User.getUsers(null, botOnly, skit_id);
+        let usersPromise = User.getUsers(null, type, skit_id);
         return Promise.all([userPromise, usersPromise])
           .then(results => {
             let user = results[0];
@@ -65,7 +66,7 @@ export var CreateUserMutation = mutationWithClientMutationId({
       console.log('Created user: ' + id)
       return {
         user_id: id,
-        botOnly: input.botOnly,
+        type: input.type,
         skit_id: input.skit_id
       }
     })
