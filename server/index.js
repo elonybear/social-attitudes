@@ -19,4 +19,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 })
 
-app.listen(GRAPHQL_PORT, () => console.log(`Now browse to localhost:${GRAPHQL_PORT}${GRAPHQL_BASE_URL}`));
+var port = process.env.PORT || GRAPHQL_PORT;
+
+app.listen(port, () => console.log(`Now browse to localhost:${port}${GRAPHQL_BASE_URL}`));
