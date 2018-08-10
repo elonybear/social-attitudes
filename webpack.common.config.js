@@ -24,6 +24,7 @@ const miniCssPlugin = new MiniCssExtractPlugin({
 })
 
 module.exports = {
+  entry: './src/index.js',
   output: {
     publicPath: '/',
     path: path.join(__dirname, 'server/dist'),
