@@ -2,20 +2,20 @@ import {
   commitMutation,
   graphql,
 } from 'react-relay'
-import environment from '../../environment'
+import environment from '../../../environment'
 import {ConnectionHandler} from 'relay-runtime';
 
 const mutation = graphql`
-  mutation DeleteMessageMutation(
-    $input: DeleteMessageInput!
+  mutation RemoveUserMutation(
+    $input: RemoveUserInput!
   ) {
-    deleteMessage(input: $input) {
-      deletedMessageID
+    removeUser(input: $input) {
+      removedUserID
   }
 }
 `
 
-export function deleteMessage(source, parentID, callback) {
+export function removeUser(source, parentID, callback) {
   const variables = {
     input: source,
   };
@@ -26,10 +26,10 @@ export function deleteMessage(source, parentID, callback) {
     type: 'RANGE_DELETE',
     parentID: parentID,
     connectionKeys: [{
-      key: 'Skit_messages',
-    }, { key: 'Skit_SkitList_messages'}],
-    pathToConnection: ['skit', 'messages'],
-    deletedIDFieldName: 'deletedMessageID'
+      key: 'Skit_users',
+    }, { key: 'Skit_SkitList_users'}],
+    pathToConnection: ['skit', 'users'],
+    deletedIDFieldName: 'removedUserID'
   }];
 
   commitMutation(
@@ -41,7 +41,7 @@ export function deleteMessage(source, parentID, callback) {
         console.log(errors)
         console.log('Response received from server.')
         console.log(response);
-        callback(response.deleteMessage.deletedMessageID);
+        callback(response.removeUser.removedUserID);
       },
       onError: err => console.error(err),
       configs

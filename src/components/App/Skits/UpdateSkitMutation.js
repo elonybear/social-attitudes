@@ -2,7 +2,7 @@ import {
   commitMutation,
   graphql,
 } from 'react-relay'
-import environment from '../../environment.js';
+import environment from '../../../environment.js';
 
 const mutation = graphql`
   mutation UpdateSkitMutation(

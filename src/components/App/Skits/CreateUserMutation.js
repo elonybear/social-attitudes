@@ -2,23 +2,21 @@ import {
   commitMutation,
   graphql,
 } from 'react-relay'
-import environment from '../../environment.js'
+import environment from '../../../environment.js'
 import {ConnectionHandler} from 'relay-runtime';
 
 const mutation = graphql`
-  mutation CreateMessageMutation(
-    $input: CreateMessageInput!
+  mutation CreateUserMutation(
+    $input: CreateUserInput!
   ) {
-    createMessage(input: $input) {
-      newMessageEdge {
+    createUser(input: $input) {
+      newUserEdge {
         node {
           id,
-          message_id,
-          text,
           user_id,
-          delay,
-          type,
-          position
+          first_name,
+          last_name,
+          bot
         }
       }
   }
@@ -26,22 +24,26 @@ const mutation = graphql`
 `
 
 
-export function createMessage(source, parentID, callback) {
+export function createUser(source, parentID, callback) {
   const variables = {
-    input: source,
+    input: {
+      ...source,
+      botOnly: true,
+      bot: true
+    },
   };
 
   const configs = [{
     type: 'RANGE_ADD',
     parentID: parentID,
     connectionInfo: [{
-      key: 'Skit_messages',
+      key: 'CreateSkitForm_userList',
       rangeBehavior: 'append',
     }, {
-      key: 'Skit_SkitList_messages',
-      rangeBehavior: 'append',
+      key: 'SkitList_userList',
+      rangeBehavior: 'append'
     }],
-    edgeName: 'newMessageEdge',
+    edgeName: 'newUserEdge',
   }];
 
   commitMutation(
@@ -52,7 +54,7 @@ export function createMessage(source, parentID, callback) {
       onCompleted: (response, errors) => {
         console.log('Response received from server.')
         console.log(response);
-        callback(response.createMessage.newMessageEdge.node.id);
+        callback(response.createUser.newUserEdge.node.user_id);
       },
       onError: err => console.error(err),
       configs

@@ -3,7 +3,7 @@ import {Switch, Route} from 'react-router-dom';
 import {createFragmentContainer, graphql, QueryRenderer} from 'react-relay';
 import CreateSkitForm from './CreateSkitForm';
 import Skit from './Skit';
-import environment from '../../environment'
+import environment from '../../../environment'
 
 
 import './css/skitlist.css';
