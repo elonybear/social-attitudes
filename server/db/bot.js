@@ -8,16 +8,16 @@ export var getBots = (bot_ids) => {
 }
 
 export function getBot(bot_id) {
-  return DB.execute('SELECT * FROM bots WHERE bot_id = ?', [bot_id]).then(bot => bot[0])
+  return DB.execute('SELECT * FROM bots WHERE bot_id = $1', [bot_id]).then(bot => bot[0])
 }
 
 export var createBot = (name) => {
-  return DB.execute('INSERT INTO bots (name) VALUES (?)', [name])
+  return DB.execute('INSERT INTO bots (name) VALUES ($1)', [name])
     .then(result => result.insertId)
 }
 
 export var deleteBot = (bot_id) => {
-  return DB.execute('DELETE FROM bots WHERE bot_id = ?', [bot_id])
+  return DB.execute('DELETE FROM bots WHERE bot_id = $1', [bot_id])
     .then(_ => bot_id)
 }
 

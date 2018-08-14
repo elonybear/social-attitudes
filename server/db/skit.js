@@ -74,12 +74,12 @@ export var getSkit = (skit_id, type) => {
       FROM
         skits AS s
       WHERE
-        skit_id = ?
+        skit_id = $1
       `, skit_id);
 
   let where = getWhereForUserType(type)
 
-  where += " AND skit_id = ?"
+  where += " AND skit_id = $1"
 
   let usersPromise =
     DB.execute(
@@ -125,7 +125,7 @@ export var createSkit = ({title, description, users}) => {
     .then(_ => {
       let createTableSQL = `
         INSERT INTO skits (title, description)
-        VALUES (?, ?)
+        VALUES ($1, $2)
       `
       return DB.execute(createTableSQL, [title, description])
         .then(result => result.insertId);
@@ -135,7 +135,7 @@ export var createSkit = ({title, description, users}) => {
         INSERT INTO skit_user_bridge
           (skit_id, user_id)
         VALUES
-      ` + users.map(user => "(?, ?)").join(",");
+      ` + users.map((user, index) => `($${index * 2 + 1}, ${index * 2 + 2})`).join(",");
       let args = _.flatten(users.map(user => [skit_id, user]));
       return DB.execute(createSkitUserBridgesSQL, args)
         .then(_ => skit_id)
@@ -158,7 +158,7 @@ export var deleteSkit = (skit_id) => {
   let deleteSQL = `
     DELETE FROM
       skits
-    WHERE skit_id = ?
+    WHERE skit_id = $1
   `
 
   return DB.query(deleteSQL, [skit_id])
@@ -167,7 +167,7 @@ export var deleteSkit = (skit_id) => {
 
 export var updateSkit = ({skit_id, title, description}) => {
   return DB.execute(
-    `UPDATE skits SET title = ?, description = ? WHERE skit_id = ?`,
+    `UPDATE skits SET title = $1, description = $2 WHERE skit_id = $3`,
     [title, description, skit_id]
   ).then(_ => skit_id)
 }
