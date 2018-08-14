@@ -15,10 +15,10 @@ client.connect()
 class POSTGRESQLClient {
 
   static execute( sql, args ) {
-    // console.log("Executing SQL query")
-    // console.log(sql);
-    // console.log("with args")
-    // console.log(args);
+    console.log("Executing SQL query")
+    console.log(sql);
+    console.log("with args")
+    console.log(args);
     return new Promise( ( resolve, reject ) => {
       client.query( sql, args, ( err, rows ) => {
         if ( err )

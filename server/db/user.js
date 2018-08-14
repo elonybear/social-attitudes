@@ -36,12 +36,12 @@ export var getUsers = (user_ids, type, skit_id) => {
     query += ` AND u.user_id = any (array [${user_ids.join(",")}])`
   }
 
-  return DB.execute(query, args).then(users => users.map(user => new User(user)))
+  return DB.execute(query, args).then(users => users.rows.map(user => new User(user)))
 }
 
 export function getUser(user_id) {
   return DB.execute('SELECT * FROM users WHERE user_id = $1', [user_id])
-    .then(users => new User(users[0]))
+    .then(users => new User(users.rows[0]))
 }
 
 export var createUser = ({first_name, last_name, bot}) => {

@@ -51,9 +51,9 @@ export var getSkits = (type) => {
     ` + where)
 
   return Promise.all([skitsPromise, usersPromise, messagesPromise]).then(results => {
-    let skits = results[0];
-    let users = results[1];
-    let messages = results[2];
+    let skits = results[0].rows;
+    let users = results[1].rows;
+    let messages = results[2].rows;
     let usersBySkit = _.groupBy(users, (user) => user.skit_id)
     let messagesBySkit = _.groupBy(messages, (message) => message.skit_id)
     return skits.map(skit => {
@@ -108,9 +108,9 @@ export var getSkit = (skit_id, type) => {
     ` + where, [skit_id])
 
   return Promise.all([skitPromise, usersPromise, messagesPromise]).then(results => {
-    let skit = results[0][0];
-    let users = results[1];
-    let messages = results[2];
+    let skit = results[0].rows[0];
+    let users = results[1].rows;
+    let messages = results[2].rows;
 
     return new Skit({
       ...skit,

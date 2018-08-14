@@ -11,7 +11,7 @@ export var getMessages = ({skit_id, type}) => {
         WHERE
           skit_id = $1`,
         [skit_id]
-      )
+      ).then(result => result.rows)
     default:
       return DB.execute(
         `SELECT
@@ -23,7 +23,7 @@ export var getMessages = ({skit_id, type}) => {
         ORDER BY
           position`,
         [skit_id, type]
-      )
+      ).then(result => result.rows)
   }
 }
 
