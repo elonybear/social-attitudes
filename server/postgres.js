@@ -1,18 +1,18 @@
 import {Client} from 'pg';
 
 var config = {
-  host     : process.env.DB_HOST,
-  port     : process.env.DB_PORT,
-  user     : process.env.DB_USER,
-  password : process.env.DB_PW,
-  database : process.env.DB
+  host     : process.env.DB_HOST || 'localhost',
+  port     : process.env.DB_PORT || '5432',
+  user     : process.env.DB_USER || 'erubin',
+  password : process.env.DB_PW || "",
+  database : process.env.DB || 'erubin'
 };
 
 const client = new Client(config)
 
 client.connect()
 
-class MySQLClient {
+class POSTGRESQLClient {
 
   static execute( sql, args ) {
     // console.log("Executing SQL query")
@@ -73,4 +73,4 @@ class MySQLClient {
   }
 }
 
-export default MySQLClient;
+export default POSTGRESQLClient;

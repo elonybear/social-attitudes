@@ -10,7 +10,7 @@
     "start-client": "NODE_ENV=development webpack-dev-server --mode development --port 3000",
     "relay": "relay-compiler --src ./src --schema ./src/graphql/schema.json --watch",
     "fetch": "graphql-js-schema-fetch http://localhost:4000/graphql > src/graphql/schema.json",
-    "heroku-postbuild": "yarn build"
+    "heroku-postbuild": "yarn build && babel-node server/init/index.js"
   },
   "engines": {
     "node": "10.1.0",

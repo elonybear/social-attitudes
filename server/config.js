@@ -1,8 +1,9 @@
 import MySQLClient from './mysql.js';
+import POSTGRESQLClient from './postgres';
 
 module.exports = {
   //DB settings
-  DB: MySQLClient,
+  DB: POSTGRESQLClient,
 
   //GraphQL settings
   GRAPHQL_PORT: 4000,
