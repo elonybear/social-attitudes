@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8510587e2acde9d1d93008ba9c4b300a
+ * @relayHash 9e82597b8caa7d59566254d6b80f00d6
  */
 
 /* eslint-disable */
@@ -32,6 +32,10 @@ export type AddUsersMutationResponse = {|
       |}>
     |}
   |}
+|};
+export type AddUsersMutation = {|
+  variables: AddUsersMutationVariables,
+  response: AddUsersMutationResponse,
 |};
 */
 

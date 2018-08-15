@@ -19,7 +19,7 @@ export var addUsersToSkit = ({skit_id, user_ids}) => {
     `INSERT INTO skit_user_bridge
       (skit_id, user_id)
     VALUES
-  ` + users.map((user, index) => `($${index * 2 + 1}, ${index * 2 + 2})`).join(","),
+  ` + user_ids.map((user, index) => `($${index * 2 + 1}, $${index * 2 + 2})`).join(","),
     _.flatten(user_ids.map(user_id => [skit_id, user_id]))
   ).then(_ => user_ids)
 }

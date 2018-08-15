@@ -34,8 +34,9 @@ export var createMessage = ({text, delay, skit_id, user_id, type, position}) => 
       (text, delay, skit_id, user_id, type, position)
     VALUES
       ($1, $2, $3, $4, $5, $6)
+    RETURNING message_id
   `, [text, delay, skit_id, user_id, type, position])
-    .then(result => result.insertId)
+    .then(result => result.rows[0].message_id)
 }
 
 export var deleteMessage = (message_id) => {

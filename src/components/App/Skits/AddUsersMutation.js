@@ -51,7 +51,7 @@ function sharedUpdater(store, parentID, newNodes) {
 
 export function addUsers(source, parentID, callback) {
   const variables = {
-    input: {...source, botOnly: true},
+    input: {...source, type: 'BOT'},
   };
 
   commitMutation(

@@ -12,4 +12,7 @@ initializeSkits()
   console.log("It worked???")
   DB.close()
 })
-  .catch(e => console.log(e));
+.catch(e => {
+  console.log(e);
+  DB.close();
+});

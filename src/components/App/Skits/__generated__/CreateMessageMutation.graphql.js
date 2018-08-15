@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 92f782a39ff71263937b3a1abf061f23
+ * @relayHash d375baf482978b3cf5e9ababee368dae
  */
 
 /* eslint-disable */
@@ -36,6 +36,10 @@ export type CreateMessageMutationResponse = {|
       |}
     |}
   |}
+|};
+export type CreateMessageMutation = {|
+  variables: CreateMessageMutationVariables,
+  response: CreateMessageMutationResponse,
 |};
 */
 

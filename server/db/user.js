@@ -45,8 +45,11 @@ export function getUser(user_id) {
 }
 
 export var createUser = ({first_name, last_name, bot}) => {
-  return DB.execute('INSERT INTO users (first_name, last_name, bot) VALUES ($1, $2, $3)', [first_name, last_name, bot])
-    .then(result => result.insertId)
+  return DB.execute('INSERT INTO users (first_name, last_name, bot) VALUES ($1, $2, $3) RETURNING user_id', [first_name, last_name, bot])
+    .then(result => {
+      console.log(result.rows[0].user_id);
+      return result.rows[0].user_id
+    })
 }
 
 export var deleteUser = (user_id) => {

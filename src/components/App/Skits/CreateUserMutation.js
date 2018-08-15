@@ -28,7 +28,6 @@ export function createUser(source, parentID, callback) {
   const variables = {
     input: {
       ...source,
-      botOnly: true,
       bot: true
     },
   };

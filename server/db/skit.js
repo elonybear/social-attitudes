@@ -75,7 +75,7 @@ export var getSkit = (skit_id, type) => {
         skits AS s
       WHERE
         skit_id = $1
-      `, skit_id);
+      `, [skit_id]);
 
   let where = getWhereForUserType(type)
 
@@ -125,17 +125,17 @@ export var createSkit = ({title, description, users}) => {
     .then(_ => {
       let createTableSQL = `
         INSERT INTO skits (title, description)
-        VALUES ($1, $2)
+        VALUES ($1, $2) RETURNING skit_id
       `
       return DB.execute(createTableSQL, [title, description])
-        .then(result => result.insertId);
+        .then(result => result.rows[0].skit_id);
     })
     .then(skit_id => {
       let createSkitUserBridgesSQL = `
         INSERT INTO skit_user_bridge
           (skit_id, user_id)
         VALUES
-      ` + users.map((user, index) => `($${index * 2 + 1}, ${index * 2 + 2})`).join(",");
+      ` + users.map((user, index) => `($${index * 2 + 1}, $${index * 2 + 2})`).join(",");
       let args = _.flatten(users.map(user => [skit_id, user]));
       return DB.execute(createSkitUserBridgesSQL, args)
         .then(_ => skit_id)

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f8cadbbabe66f6f4bcf82d5ae0251b4c
+ * @relayHash 9de1ac2f0b824406b944fad81d6edde0
  */
 
 /* eslint-disable */
@@ -17,6 +17,10 @@ export type SkitList_QueryResponse = {|
   +skit: ?{|
     +$fragmentRefs: Skit_skit$ref
   |}
+|};
+export type SkitList_Query = {|
+  variables: SkitList_QueryVariables,
+  response: SkitList_QueryResponse,
 |};
 */
 

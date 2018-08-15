@@ -35,7 +35,7 @@ import {
 
 let removeUserInputFields = {
   'skit_id': { type: new GraphQLNonNull(GraphQLInt) },
-  'user_id': { type: new GraphQLNonNull(GraphQLList(GraphQLInt)) }
+  'user_id': { type: new GraphQLNonNull(GraphQLInt) }
 }
 
 export var RemoveUserMutation = mutationWithClientMutationId({

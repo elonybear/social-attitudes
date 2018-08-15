@@ -5,7 +5,7 @@ import {removeUser} from './RemoveUserMutation'
 import {addUsers} from './AddUsersMutation.js';
 import {createUser} from './CreateUserMutation';
 
-export default class UserList extends React.Component {
+export default class SkitUserList extends React.Component {
 
   constructor(props) {
     super(props);
@@ -37,6 +37,7 @@ export default class UserList extends React.Component {
   }
 
   handleCancelClick() {
+    console.log('Handling cancel click')
     $('.add-form').slideUp();
     setTimeout(() => this.setState({adding: false, availableUsersSelected: []}), 330)
   }
@@ -118,7 +119,10 @@ export default class UserList extends React.Component {
     addUsers({
       skit_id: this.props.skit.skit_id,
       user_ids: this.state.availableUsersSelected
-    }, this.props.skit.id, () => this.setState({availableUsersSelected: []}))
+    }, this.props.skit.id, () => {
+      console.log('Clearing availableUsersSelected')
+      this.handleCancelClick();
+    })
   }
 
   renderAddButton() {
@@ -173,11 +177,6 @@ export default class UserList extends React.Component {
         user_ids: [user_id]
       }, this.props.skit.id, () => this.handleCancelUser())
     })
-    // createAndAddUser({
-    //   name: this.state.name,
-    //   skit_id: this.props.skit.skit_id,
-    //   user_ids: this.props.skit.users.edges.map(edge => edge.node.user_id)
-    // }, this.props.users.id, this.props.skit.id, () => console.log('It worked???'))
   }
 
   handleCancelUser() {

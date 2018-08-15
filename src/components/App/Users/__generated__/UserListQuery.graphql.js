@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 34ecd393070ad7331395029ee976d77d
+ * @relayHash 014f0132823a3f47e6df480e46c5c622
  */
 
 /* eslint-disable */
@@ -18,6 +18,10 @@ export type UserListQueryResponse = {|
   +users: ?{|
     +$fragmentRefs: UserList_users$ref
   |}
+|};
+export type UserListQuery = {|
+  variables: UserListQueryVariables,
+  response: UserListQueryResponse,
 |};
 */
 
@@ -71,7 +75,21 @@ var v0 = [
     "defaultValue": null
   }
 ],
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "after",
+    "variableName": "cursor",
+    "type": "String"
+  },
+  {
+    "kind": "Variable",
+    "name": "first",
+    "variableName": "count",
+    "type": "Int"
+  }
+],
+v2 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "id",
@@ -142,20 +160,7 @@ return {
             "alias": null,
             "name": "userList",
             "storageKey": null,
-            "args": [
-              {
-                "kind": "Variable",
-                "name": "after",
-                "variableName": "cursor",
-                "type": "String"
-              },
-              {
-                "kind": "Variable",
-                "name": "first",
-                "variableName": "count",
-                "type": "Int"
-              }
-            ],
+            "args": v1,
             "concreteType": "UserConnection",
             "plural": false,
             "selections": [
@@ -177,7 +182,7 @@ return {
                     "concreteType": "User",
                     "plural": false,
                     "selections": [
-                      v1,
+                      v2,
                       {
                         "kind": "ScalarField",
                         "alias": null,
@@ -241,25 +246,12 @@ return {
             "kind": "LinkedHandle",
             "alias": null,
             "name": "userList",
-            "args": [
-              {
-                "kind": "Variable",
-                "name": "after",
-                "variableName": "cursor",
-                "type": "String"
-              },
-              {
-                "kind": "Variable",
-                "name": "first",
-                "variableName": "count",
-                "type": "Int"
-              }
-            ],
+            "args": v1,
             "handle": "connection",
             "key": "UserList_userList",
             "filters": null
           },
-          v1
+          v2
         ]
       }
     ]

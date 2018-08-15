@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f02d37901354ded64bcfbde9071ef948
+ * @relayHash 7790aa8149b327783d6d939ef6d4566a
  */
 
 /* eslint-disable */
@@ -21,6 +21,10 @@ export type RemoveUserMutationResponse = {|
   +removeUser: ?{|
     +removedUserID: ?string
   |}
+|};
+export type RemoveUserMutation = {|
+  variables: RemoveUserMutationVariables,
+  response: RemoveUserMutationResponse,
 |};
 */
 

@@ -13,8 +13,9 @@
     "heroku-postbuild": "yarn build && babel-node server/init/index.js"
   },
   "engines": {
-    "node": "10.1.0",
-    "npm": "5.6.0"
+    "node": "10.8.0",
+    "npm": "5.6.0",
+    "yarn": "1.9.4"
   },
   "keywords": [],
   "author": "",

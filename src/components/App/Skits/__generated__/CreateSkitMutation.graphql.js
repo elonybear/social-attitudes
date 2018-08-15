@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 08b66fbf4037d9d2174627090e05fbfc
+ * @relayHash 634b68a7562af6b04259a5fb1535e67a
  */
 
 /* eslint-disable */
@@ -46,6 +46,10 @@ export type CreateSkitMutationResponse = {|
       |}
     |}
   |}
+|};
+export type CreateSkitMutation = {|
+  variables: CreateSkitMutationVariables,
+  response: CreateSkitMutationResponse,
 |};
 */
 

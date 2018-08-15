@@ -30,7 +30,7 @@ class POSTGRESQLClient {
 
   static transact() {
     return new Promise( (resolve, reject) => {
-      client.beginTransaction((err) => {
+      client.query('BEGIN', (err) => {
         if (err) {
           return reject(err, 'transact');
         }
@@ -42,7 +42,7 @@ class POSTGRESQLClient {
 
   static commit() {
     return new Promise( (resolve, reject) => {
-      client.commit((err) => {
+      client.query('COMMIT', (err) => {
         if (err) {
           return reject(err, 'commit');
         }
@@ -56,7 +56,11 @@ class POSTGRESQLClient {
 
   static rollback() {
     return new Promise( (resolve, reject) => {
-      client.rollback(() => {
+      client.query('ROLLBACK', (err) => {
+        if (err) {
+          console.error('Error rolling back client', err.stack);
+          reject(err);
+        }
         resolve();
       })
     })

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 0984a74b6a7315ba99ced771ff2fc2f8
+ * @relayHash 26c2c33990a23e18ec803b3b7e99941d
  */
 
 /* eslint-disable */
@@ -20,6 +20,10 @@ export type DeleteMessageMutationResponse = {|
   +deleteMessage: ?{|
     +deletedMessageID: string
   |}
+|};
+export type DeleteMessageMutation = {|
+  variables: DeleteMessageMutationVariables,
+  response: DeleteMessageMutationResponse,
 |};
 */
 

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash cabbe0d613eee418fb141e48fcb35123
+ * @relayHash c7915b2b7aadc04d81dd248ac5b2172c
  */
 
 /* eslint-disable */
@@ -27,6 +27,10 @@ export type UpdateSkitMutationResponse = {|
       +last_updated: ?string,
     |}
   |}
+|};
+export type UpdateSkitMutation = {|
+  variables: UpdateSkitMutationVariables,
+  response: UpdateSkitMutationResponse,
 |};
 */
 

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ce7812f612931cf114153a3478d134f3
+ * @relayHash 7ea78496b911a01b4eb80854d50d7796
  */
 
 /* eslint-disable */
@@ -24,6 +24,10 @@ export type Base_QueryResponse = {|
   +users: ?{|
     +$fragmentRefs: SkitList_users$ref
   |},
+|};
+export type Base_Query = {|
+  variables: Base_QueryVariables,
+  response: Base_QueryResponse,
 |};
 */
 
@@ -180,56 +184,64 @@ v1 = [
     "type": "UserCategory"
   }
 ],
-v2 = {
+v2 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 5,
+    "type": "Int"
+  }
+],
+v3 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "id",
   "args": null,
   "storageKey": null
 },
-v3 = {
+v4 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "first_name",
   "args": null,
   "storageKey": null
 },
-v4 = {
+v5 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "last_name",
   "args": null,
   "storageKey": null
 },
-v5 = {
+v6 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "__typename",
   "args": null,
   "storageKey": null
 },
-v6 = {
+v7 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "cursor",
   "args": null,
   "storageKey": null
 },
-v7 = {
+v8 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "hasNextPage",
   "args": null,
   "storageKey": null
 },
-v8 = {
+v9 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "endCursor",
   "args": null,
   "storageKey": null
 },
-v9 = [
+v10 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -237,7 +249,7 @@ v9 = [
     "type": "Int"
   }
 ],
-v10 = {
+v11 = {
   "kind": "LinkedField",
   "alias": null,
   "name": "pageInfo",
@@ -246,11 +258,11 @@ v10 = {
   "concreteType": "PageInfo",
   "plural": false,
   "selections": [
-    v8,
-    v7
+    v9,
+    v8
   ]
 },
-v11 = [
+v12 = [
   {
     "kind": "LinkedField",
     "alias": null,
@@ -269,7 +281,7 @@ v11 = [
         "concreteType": "User",
         "plural": false,
         "selections": [
-          v2,
+          v3,
           {
             "kind": "ScalarField",
             "alias": null,
@@ -277,15 +289,15 @@ v11 = [
             "args": null,
             "storageKey": null
           },
-          v3,
           v4,
-          v5
+          v5,
+          v6
         ]
       },
-      v6
+      v7
     ]
   },
-  v10
+  v11
 ];
 return {
   "kind": "Request",
@@ -382,14 +394,7 @@ return {
             "alias": null,
             "name": "userList",
             "storageKey": "userList(first:5)",
-            "args": [
-              {
-                "kind": "Literal",
-                "name": "first",
-                "value": 5,
-                "type": "Int"
-              }
-            ],
+            "args": v2,
             "concreteType": "UserConnection",
             "plural": false,
             "selections": [
@@ -411,13 +416,13 @@ return {
                     "concreteType": "User",
                     "plural": false,
                     "selections": [
-                      v2,
                       v3,
                       v4,
-                      v5
+                      v5,
+                      v6
                     ]
                   },
-                  v6
+                  v7
                 ]
               },
               {
@@ -429,8 +434,8 @@ return {
                 "concreteType": "PageInfo",
                 "plural": false,
                 "selections": [
-                  v7,
-                  v8
+                  v8,
+                  v9
                 ]
               }
             ]
@@ -439,19 +444,12 @@ return {
             "kind": "LinkedHandle",
             "alias": null,
             "name": "userList",
-            "args": [
-              {
-                "kind": "Literal",
-                "name": "first",
-                "value": 5,
-                "type": "Int"
-              }
-            ],
+            "args": v2,
             "handle": "connection",
             "key": "UserList_userList",
             "filters": null
           },
-          v2
+          v3
         ]
       },
       {
@@ -463,13 +461,13 @@ return {
         "concreteType": "SkitList",
         "plural": false,
         "selections": [
-          v2,
+          v3,
           {
             "kind": "LinkedField",
             "alias": null,
             "name": "skits",
             "storageKey": "skits(first:100)",
-            "args": v9,
+            "args": v10,
             "concreteType": "SkitConnection",
             "plural": false,
             "selections": [
@@ -491,7 +489,7 @@ return {
                     "concreteType": "Skit",
                     "plural": false,
                     "selections": [
-                      v2,
+                      v3,
                       {
                         "kind": "ScalarField",
                         "alias": null,
@@ -525,16 +523,16 @@ return {
                         "alias": "SkitList_users",
                         "name": "users",
                         "storageKey": "users(first:100)",
-                        "args": v9,
+                        "args": v10,
                         "concreteType": "UserConnection",
                         "plural": false,
-                        "selections": v11
+                        "selections": v12
                       },
                       {
                         "kind": "LinkedHandle",
                         "alias": "SkitList_users",
                         "name": "users",
-                        "args": v9,
+                        "args": v10,
                         "handle": "connection",
                         "key": "Skit_SkitList_users",
                         "filters": null
@@ -544,7 +542,7 @@ return {
                         "alias": "SkitList_messages",
                         "name": "messages",
                         "storageKey": "messages(first:100)",
-                        "args": v9,
+                        "args": v10,
                         "concreteType": "MessageConnection",
                         "plural": false,
                         "selections": [
@@ -566,39 +564,39 @@ return {
                                 "concreteType": "Message",
                                 "plural": false,
                                 "selections": [
-                                  v2,
-                                  v5
+                                  v3,
+                                  v6
                                 ]
                               },
-                              v6
+                              v7
                             ]
                           },
-                          v10
+                          v11
                         ]
                       },
                       {
                         "kind": "LinkedHandle",
                         "alias": "SkitList_messages",
                         "name": "messages",
-                        "args": v9,
+                        "args": v10,
                         "handle": "connection",
                         "key": "Skit_SkitList_messages",
                         "filters": null
                       },
-                      v5
+                      v6
                     ]
                   },
-                  v6
+                  v7
                 ]
               },
-              v10
+              v11
             ]
           },
           {
             "kind": "LinkedHandle",
             "alias": null,
             "name": "skits",
-            "args": v9,
+            "args": v10,
             "handle": "connection",
             "key": "SkitList_skits",
             "filters": []
@@ -614,22 +612,22 @@ return {
         "concreteType": "UserList",
         "plural": false,
         "selections": [
-          v2,
+          v3,
           {
             "kind": "LinkedField",
             "alias": null,
             "name": "userList",
             "storageKey": "userList(first:100)",
-            "args": v9,
+            "args": v10,
             "concreteType": "UserConnection",
             "plural": false,
-            "selections": v11
+            "selections": v12
           },
           {
             "kind": "LinkedHandle",
             "alias": null,
             "name": "userList",
-            "args": v9,
+            "args": v10,
             "handle": "connection",
             "key": "SkitList_userList",
             "filters": []
@@ -638,7 +636,7 @@ return {
             "kind": "LinkedHandle",
             "alias": null,
             "name": "userList",
-            "args": v9,
+            "args": v10,
             "handle": "connection",
             "key": "CreateSkitForm_userList",
             "filters": []

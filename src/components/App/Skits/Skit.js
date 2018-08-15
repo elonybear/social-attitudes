@@ -34,8 +34,8 @@ class Skit extends React.Component {
   }
 
   componentDidMount() {
-    document.getElementById("skit").addEventListener("click", this.handleTextClick.bind(this, null));
-    document.getElementById("skit").addEventListener("keyup", this.handleKeypress.bind(this));
+    document.getElementById(this.props.skit.skit_id + "-title").addEventListener("click", this.handleTextClick.bind(this, null));
+    document.getElementById(this.props.skit.skit_id + "-title").addEventListener("keyup", this.handleKeypress.bind(this));
   }
 
   handlePreviewClick() {
@@ -175,10 +175,10 @@ class Skit extends React.Component {
     let skit = this.props.skit
     return (
       <div id="skit" className="skit-wrapper outset rounded">
-        <div onClick={this.handleBackButton.bind(this)} className="clickable">
+        <div onClick={this.handleBackButton.bind(this)} className="clickable inline">
           <i className="fas fa-chevron-left m-r-5"></i>Back to list
         </div>
-        <div className="row content-title rounded m-b-md">
+        <div id={this.props.skit.skit_id + "-title"} className="row content-title rounded m-b-md">
           <div className="col-md-8">
             {!this.state.editingTitle && this.renderTitle(skit)}
             {this.state.editingTitle && this.renderTitleForm(skit)}
