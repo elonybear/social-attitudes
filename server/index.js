@@ -1,4 +1,5 @@
 var express = require('express');
+import fallback from 'express-history-api-fallback'
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 import schema from './schema.js';
@@ -8,7 +9,11 @@ import {GRAPHQL_PORT, GRAPHQL_BASE_URL} from './config';
 
 var app = express();
 
-app.use('/', express.static(path.join(__dirname, 'dist')))
+var root = path.join(__dirname, 'dist')
+
+app.use('/', express.static(root))
+app.use(fallback('index.html', { root }))
+
 
 app.use(GRAPHQL_BASE_URL, graphqlHTTP({
   schema: schema,
